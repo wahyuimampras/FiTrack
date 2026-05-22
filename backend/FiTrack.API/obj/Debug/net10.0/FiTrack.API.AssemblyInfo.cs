@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("FiTrack.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+83013f45f3bf3d228caef1639e47d5f3b77e45b6")]
 [assembly: System.Reflection.AssemblyProductAttribute("FiTrack.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("FiTrack.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -158,3 +158,4 @@ D:\SKILL UPGRADE\DOT NET ANGULAR\FiTrack\backend\fitrack.api\obj\Debug\net10.0\r
 D:\SKILL UPGRADE\DOT NET ANGULAR\FiTrack\backend\fitrack.api\obj\Debug\net10.0\FiTrack.API.pdb
 D:\SKILL UPGRADE\DOT NET ANGULAR\FiTrack\backend\FiTrack.API\obj\Debug\net10.0\FiTrack.API.genruntimeconfig.cache
 D:\SKILL UPGRADE\DOT NET ANGULAR\FiTrack\backend\FiTrack.API\obj\Debug\net10.0\ref\FiTrack.API.dll
+D:\SKILL UPGRADE\DOT NET ANGULAR\FiTrack\backend\fitrack.api\obj\Debug\net10.0\FiTrack.API.sourcelink.json
