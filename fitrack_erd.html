@@ -1,0 +1,213 @@
+
+<style>
+#erd-wrap { padding: 1rem 0; }
+#erd svg { width: 100%; }
+.legend { display:flex; gap:16px; flex-wrap:wrap; margin-top:12px; font-size:12px; color:var(--color-text-secondary); }
+.legend-item { display:flex; align-items:center; gap:6px; }
+.dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+</style>
+
+<h2 class="sr-only">Entity Relationship Diagram aplikasi FiTrack — menampilkan relasi antar tabel users, sessions, strava tokens, accounts, categories, transactions, budgets, saving goals, recurring bills, dan activities</h2>
+
+<div id="erd-wrap"><div id="erd"></div></div>
+
+<div class="legend">
+  <div class="legend-item"><div class="dot" style="background:#285A48"></div> Auth & user</div>
+  <div class="legend-item"><div class="dot" style="background:#1D9E75"></div> Finance</div>
+  <div class="legend-item"><div class="dot" style="background:#378ADD"></div> Workout</div>
+</div>
+
+<script type="module">
+import mermaid from 'https://esm.sh/mermaid@11/dist/mermaid.esm.min.mjs';
+const dark = matchMedia('(prefers-color-scheme: dark)').matches;
+await document.fonts.ready;
+mermaid.initialize({
+  startOnLoad: false,
+  theme: 'base',
+  fontFamily: '"Anthropic Sans", sans-serif',
+  themeVariables: {
+    darkMode: dark,
+    fontSize: '12px',
+    fontFamily: '"Anthropic Sans", sans-serif',
+    lineColor: dark ? '#9c9a92' : '#73726c',
+    textColor: dark ? '#c2c0b6' : '#3d3d3a',
+    primaryColor: dark ? '#1f4738' : '#d9ede6',
+    primaryBorderColor: dark ? '#285A48' : '#285A48',
+    primaryTextColor: dark ? '#9FE1CB' : '#18382c',
+    secondaryColor: dark ? '#0c2a4a' : '#E6F1FB',
+    secondaryBorderColor: dark ? '#185FA5' : '#185FA5',
+    secondaryTextColor: dark ? '#B5D4F4' : '#042C53',
+    tertiaryColor: dark ? '#1a1400' : '#FAEEDA',
+    tertiaryBorderColor: dark ? '#854F0B' : '#854F0B',
+    tertiaryTextColor: dark ? '#FAC775' : '#412402',
+  },
+  er: {
+    diagramPadding: 32,
+    layoutDirection: 'TB',
+    minEntityWidth: 100,
+    minEntityHeight: 75,
+    entityPadding: 15,
+    useMaxWidth: true,
+  }
+});
+
+const diagram = `erDiagram
+  USERS {
+    uuid id PK
+    varchar username UK
+    varchar email UK
+    text password_hash
+    varchar strava_athlete_id
+    boolean is_active
+    timestamptz created_at
+  }
+
+  USER_SESSIONS {
+    uuid id PK
+    uuid user_id FK
+    text refresh_token_hash
+    text device_info
+    varchar ip_address
+    timestamptz created_at
+    timestamptz expires_at
+    timestamptz revoked_at
+  }
+
+  STRAVA_TOKENS {
+    uuid id PK
+    uuid user_id FK
+    text access_token
+    text refresh_token
+    timestamptz expires_at
+    varchar athlete_id
+    timestamptz updated_at
+  }
+
+  ACCOUNTS {
+    uuid id PK
+    uuid user_id FK
+    varchar name
+    varchar type
+    numeric balance
+    varchar color
+    varchar icon
+    boolean is_active
+    timestamptz created_at
+  }
+
+  CATEGORIES {
+    uuid id PK
+    uuid user_id FK
+    varchar name
+    varchar type
+    varchar icon
+    varchar color
+    boolean is_default
+    timestamptz created_at
+  }
+
+  TRANSACTIONS {
+    uuid id PK
+    uuid user_id FK
+    uuid account_id FK
+    uuid category_id FK
+    varchar type
+    numeric amount
+    varchar description
+    text notes
+    date date
+    timestamptz created_at
+  }
+
+  BUDGETS {
+    uuid id PK
+    uuid user_id FK
+    uuid category_id FK
+    numeric amount
+    smallint month
+    smallint year
+    timestamptz created_at
+  }
+
+  SAVING_GOALS {
+    uuid id PK
+    uuid user_id FK
+    varchar name
+    numeric target_amount
+    numeric current_amount
+    date target_date
+    boolean is_completed
+    timestamptz created_at
+  }
+
+  RECURRING_BILLS {
+    uuid id PK
+    uuid user_id FK
+    uuid category_id FK
+    varchar name
+    numeric amount
+    smallint due_day
+    boolean is_active
+    timestamptz last_reminded
+    timestamptz created_at
+  }
+
+  ACTIVITIES {
+    uuid id PK
+    uuid user_id FK
+    bigint strava_activity_id UK
+    varchar type
+    varchar name
+    float distance_meters
+    int duration_seconds
+    float elevation_gain_m
+    int calories_burned
+    float average_pace
+    float average_heart_rate
+    timestamptz start_date
+    boolean is_from_strava
+    timestamptz created_at
+  }
+
+  USERS ||--o{ USER_SESSIONS : "has sessions"
+  USERS ||--o| STRAVA_TOKENS : "has token"
+  USERS ||--o{ ACCOUNTS : "owns"
+  USERS ||--o{ CATEGORIES : "defines"
+  USERS ||--o{ TRANSACTIONS : "records"
+  USERS ||--o{ BUDGETS : "sets"
+  USERS ||--o{ SAVING_GOALS : "tracks"
+  USERS ||--o{ RECURRING_BILLS : "schedules"
+  USERS ||--o{ ACTIVITIES : "logs"
+  ACCOUNTS ||--o{ TRANSACTIONS : "source of"
+  CATEGORIES ||--o{ TRANSACTIONS : "classifies"
+  CATEGORIES ||--o{ BUDGETS : "budgeted by"
+  CATEGORIES ||--o{ RECURRING_BILLS : "tagged as"
+`;
+
+const { svg } = await mermaid.render('fitrack-erd-svg', diagram);
+document.getElementById('erd').innerHTML = svg;
+
+document.querySelectorAll('#erd svg .node').forEach(node => {
+  const firstPath = node.querySelector('path[d]');
+  if (!firstPath) return;
+  const d = firstPath.getAttribute('d');
+  const nums = d.match(/-?[\d.]+/g)?.map(Number);
+  if (!nums || nums.length < 8) return;
+  const xs = [nums[0], nums[2], nums[4], nums[6]];
+  const ys = [nums[1], nums[3], nums[5], nums[7]];
+  const x = Math.min(...xs), y = Math.min(...ys);
+  const w = Math.max(...xs) - x, h = Math.max(...ys) - y;
+  const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+  rect.setAttribute('x', x); rect.setAttribute('y', y);
+  rect.setAttribute('width', w); rect.setAttribute('height', h);
+  rect.setAttribute('rx', '8');
+  for (const a of ['fill', 'stroke', 'stroke-width', 'class', 'style']) {
+    if (firstPath.hasAttribute(a)) rect.setAttribute(a, firstPath.getAttribute(a));
+  }
+  firstPath.replaceWith(rect);
+});
+
+document.querySelectorAll('#erd svg .row-rect-odd path, #erd svg .row-rect-even path').forEach(p => {
+  p.setAttribute('stroke', 'none');
+});
+</script>

@@ -1,0 +1,48 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: fitrack_db
+    environment:
+      POSTGRES_USER: fitrack_user
+      POSTGRES_PASSWORD: fitrack_pass_2024
+      POSTGRES_DB: fitrack_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - fitrack_pgdata:/var/lib/postgresql/data
+      - ./docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fitrack_user -d fitrack_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: fitrack_redis
+    ports:
+      - "6380:6379"
+    volumes:
+      - fitrack_redis_data:/data
+    command: redis-server --appendonly yes
+    restart: unless-stopped
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: fitrack_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@fitrack.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "6060:80"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  fitrack_pgdata:
+  fitrack_redis_data:
