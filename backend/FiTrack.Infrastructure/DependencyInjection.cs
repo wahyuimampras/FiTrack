@@ -26,6 +26,7 @@ public static class DependencyInjection
         services.AddScoped<ISessionService, SessionService>();
         services.AddScoped<ICurrentUserService, CurrentUserService>();
         services.AddScoped<IStravaService, StravaService>();
+        services.AddScoped<IAccountRepository, AccountRepository>();
 
         return services;
     }

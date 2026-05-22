@@ -41,4 +41,14 @@ public class Account
     {
         Balance += amount;
     }
+
+    public void UpdateDetails(string name, AccountType type, decimal balance, string? color, string? icon, bool isActive)
+    {
+        Name = name;
+        Type = type;
+        Balance = balance;
+        Color = color;
+        Icon = icon;
+        IsActive = isActive;
+    }
 }

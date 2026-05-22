@@ -15,3 +15,4 @@ D:\SKILL UPGRADE\DOT NET ANGULAR\FiTrack\backend\FiTrack.Infrastructure\obj\Debu
 D:\SKILL UPGRADE\DOT NET ANGULAR\FiTrack\backend\FiTrack.Infrastructure\obj\Debug\net10.0\refint\FiTrack.Infrastructure.dll
 D:\SKILL UPGRADE\DOT NET ANGULAR\FiTrack\backend\FiTrack.Infrastructure\obj\Debug\net10.0\FiTrack.Infrastructure.pdb
 D:\SKILL UPGRADE\DOT NET ANGULAR\FiTrack\backend\FiTrack.Infrastructure\obj\Debug\net10.0\ref\FiTrack.Infrastructure.dll
+D:\SKILL UPGRADE\DOT NET ANGULAR\FiTrack\backend\FiTrack.Infrastructure\obj\Debug\net10.0\FiTrack.Infrastructure.sourcelink.json

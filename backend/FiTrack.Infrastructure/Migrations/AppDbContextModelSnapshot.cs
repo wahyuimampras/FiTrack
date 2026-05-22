@@ -44,7 +44,6 @@ namespace FiTrack.Infrastructure.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int>("Type")
@@ -169,7 +168,6 @@ namespace FiTrack.Infrastructure.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int>("Type")
@@ -210,7 +208,6 @@ namespace FiTrack.Infrastructure.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<Guid>("UserId")
@@ -241,7 +238,6 @@ namespace FiTrack.Infrastructure.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<decimal>("TargetAmount")
@@ -267,18 +263,15 @@ namespace FiTrack.Infrastructure.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("AccessToken")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("AthleteId")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("ExpiresAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("RefreshToken")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("UpdatedAt")
@@ -354,21 +347,18 @@ namespace FiTrack.Infrastructure.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
 
                     b.Property<string>("PasswordHash")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("StravaAthleteId")
                         .HasColumnType("text");
 
                     b.Property<string>("Username")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
@@ -386,22 +376,18 @@ namespace FiTrack.Infrastructure.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DeviceInfo")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("ExpiresAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("IpAddress")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("RefreshToken")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("RefreshTokenHash")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("RevokedAt")

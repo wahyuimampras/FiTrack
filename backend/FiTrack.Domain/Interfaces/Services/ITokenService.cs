@@ -7,5 +7,5 @@ public interface ITokenService
 {
     string GenerateAccessToken(User user);
     string GenerateRefreshToken();
-    ClaimsPrincipal? ValidateToken(string token);
+    ClaimsPrincipal GetPrincipalFromExpiredToken(string token);
 }

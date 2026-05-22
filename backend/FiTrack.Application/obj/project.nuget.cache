@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "BT72V6cmVg0=",
+  "dgSpecHash": "RfT72hfR9Ww=",
   "success": true,
-  "projectFilePath": "D:\\SKILL UPGRADE\\DOT NET ANGULAR\\FiTrack\\backend\\FiTrack.Application\\FiTrack.Application.csproj",
+  "projectFilePath": "D:\\SKILL UPGRADE\\DOT NET ANGULAR\\FiTrack\\backend\\Fitrack.application\\FiTrack.Application.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\wahyu\\.nuget\\packages\\automapper\\16.1.1\\automapper.16.1.1.nupkg.sha512",
     "C:\\Users\\wahyu\\.nuget\\packages\\bcrypt.net-next\\4.2.0\\bcrypt.net-next.4.2.0.nupkg.sha512",
