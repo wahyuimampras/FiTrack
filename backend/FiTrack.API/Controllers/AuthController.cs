@@ -1,4 +1,5 @@
 using FiTrack.Application.Features.Auth.Commands.Login;
+using FiTrack.Application.Features.Auth.Commands.Register;
 using FiTrack.Domain.Interfaces.Services;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -10,6 +11,14 @@ namespace FiTrack.API.Controllers;
 [Route("api/auth")]
 public class AuthController(ISender mediator, ITokenService tokenService, ISessionService sessionService) : ControllerBase
 {
+    [HttpPost("register")]
+    [AllowAnonymous]
+    public async Task<IActionResult> Register([FromBody] RegisterCommand command)
+    {
+        var user = await mediator.Send(command);
+        return Ok(new { message = "Registration successful", userId = user.Id });
+    }
+
     [HttpPost("login")]
     [AllowAnonymous]
     public async Task<IActionResult> Login([FromBody] LoginCommand command)
@@ -17,13 +26,13 @@ public class AuthController(ISender mediator, ITokenService tokenService, ISessi
         var user = await mediator.Send(command);
         if (user == null) return Unauthorized(new { message = "Invalid credentials" });
 
-        var accessToken = tokenService.GenerateAccessToken(user);
         var refreshToken = tokenService.GenerateRefreshToken();
 
         var deviceInfo = Request.Headers.UserAgent.ToString();
         var ip = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
 
         var session = await sessionService.CreateSessionAsync(user.Id, refreshToken, deviceInfo, ip);
+        var accessToken = tokenService.GenerateAccessToken(user, session.Id);
 
         Response.Cookies.Append("refreshToken", refreshToken, new CookieOptions
         {
@@ -55,7 +64,7 @@ public class AuthController(ISender mediator, ITokenService tokenService, ISessi
 
         // Rotate refresh token
         var newRefreshToken = tokenService.GenerateRefreshToken();
-        var newAccessToken = tokenService.GenerateAccessToken(session.User);
+        var newAccessToken = tokenService.GenerateAccessToken(session.User, session.Id);
 
         await sessionService.RotateRefreshTokenAsync(session.Id, newRefreshToken);
 

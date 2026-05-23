@@ -1,3 +1,7 @@
+using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using FiTrack.Domain.Entities;
 
 namespace FiTrack.Domain.Interfaces.Services;
@@ -10,4 +14,5 @@ public interface ISessionService
     Task RevokeAllSessionsAsync(Guid userId, CancellationToken ct = default);
     Task<bool> IsSessionActiveAsync(Guid sessionId, CancellationToken ct = default);
     Task RotateRefreshTokenAsync(Guid sessionId, string newRefreshToken, CancellationToken ct = default);
+    Task<List<UserSession>> GetActiveSessionsAsync(Guid userId, CancellationToken ct = default);
 }

@@ -1456,8 +1456,8 @@
     },
     "FiTrack.Application/1.0.0": {
       "type": "project",
-      "path": "../Fitrack.application/FiTrack.Application.csproj",
-      "msbuildProject": "../Fitrack.application/FiTrack.Application.csproj"
+      "path": "../FiTrack.Application/FiTrack.Application.csproj",
+      "msbuildProject": "../FiTrack.Application/FiTrack.Application.csproj"
     },
     "FiTrack.Domain/1.0.0": {
       "type": "project",
@@ -1502,8 +1502,8 @@
         "net10.0": {
           "targetAlias": "net10.0",
           "projectReferences": {
-            "D:\\SKILL UPGRADE\\DOT NET ANGULAR\\FiTrack\\backend\\Fitrack.application\\FiTrack.Application.csproj": {
-              "projectPath": "D:\\SKILL UPGRADE\\DOT NET ANGULAR\\FiTrack\\backend\\Fitrack.application\\FiTrack.Application.csproj"
+            "D:\\SKILL UPGRADE\\DOT NET ANGULAR\\FiTrack\\backend\\FiTrack.Application\\FiTrack.Application.csproj": {
+              "projectPath": "D:\\SKILL UPGRADE\\DOT NET ANGULAR\\FiTrack\\backend\\FiTrack.Application\\FiTrack.Application.csproj"
             }
           }
         }

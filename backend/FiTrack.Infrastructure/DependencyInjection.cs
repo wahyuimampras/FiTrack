@@ -25,7 +25,7 @@ public static class DependencyInjection
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<ISessionService, SessionService>();
         services.AddScoped<ICurrentUserService, CurrentUserService>();
-        services.AddScoped<IStravaService, StravaService>();
+        services.AddHttpClient<IStravaService, StravaService>();
         services.AddScoped<IAccountRepository, AccountRepository>();
         services.AddScoped<IBudgetRepository, BudgetRepository>();
         services.AddScoped<IRecurringBillRepository, RecurringBillRepository>();

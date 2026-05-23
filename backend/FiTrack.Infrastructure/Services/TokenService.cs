@@ -15,7 +15,7 @@ public class TokenService(IConfiguration config) : ITokenService
     private readonly string _issuer = config["Jwt:Issuer"] ?? "FiTrack";
     private readonly string _audience = config["Jwt:Audience"] ?? "FiTrack-Users";
 
-    public string GenerateAccessToken(User user)
+    public string GenerateAccessToken(User user, Guid? sessionId = null)
     {
         var claims = new List<Claim>
         {
@@ -25,6 +25,11 @@ public class TokenService(IConfiguration config) : ITokenService
             new("stravaConnected", (user.StravaAthleteId != null).ToString()),
             new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
+
+        if (sessionId.HasValue)
+        {
+            claims.Add(new Claim("sessionId", sessionId.Value.ToString()));
+        }
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secret));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

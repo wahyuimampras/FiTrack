@@ -42,4 +42,9 @@ public class User
     {
         StravaAthleteId = athleteId;
     }
+
+    public void DisconnectStrava()
+    {
+        StravaAthleteId = null;
+    }
 }
