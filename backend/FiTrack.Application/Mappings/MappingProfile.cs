@@ -10,5 +10,6 @@ public class MappingProfile : Profile
     {
         CreateMap<Transaction, TransactionDto>();
         CreateMap<Account, AccountDto>();
+        CreateMap<Budget, BudgetDto>().ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.Name));
     }
 }

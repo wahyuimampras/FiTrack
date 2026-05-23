@@ -3791,8 +3791,8 @@
     },
     "FiTrack.Application/1.0.0": {
       "type": "project",
-      "path": "../Fitrack.application/FiTrack.Application.csproj",
-      "msbuildProject": "../Fitrack.application/FiTrack.Application.csproj"
+      "path": "../FiTrack.Application/FiTrack.Application.csproj",
+      "msbuildProject": "../FiTrack.Application/FiTrack.Application.csproj"
     },
     "FiTrack.Domain/1.0.0": {
       "type": "project",
@@ -3822,11 +3822,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\SKILL UPGRADE\\DOT NET ANGULAR\\FiTrack\\backend\\fitrack.api\\FiTrack.API.csproj",
+      "projectUniqueName": "D:\\SKILL UPGRADE\\DOT NET ANGULAR\\FiTrack\\backend\\FiTrack.API\\FiTrack.API.csproj",
       "projectName": "FiTrack.API",
-      "projectPath": "D:\\SKILL UPGRADE\\DOT NET ANGULAR\\FiTrack\\backend\\fitrack.api\\FiTrack.API.csproj",
+      "projectPath": "D:\\SKILL UPGRADE\\DOT NET ANGULAR\\FiTrack\\backend\\FiTrack.API\\FiTrack.API.csproj",
       "packagesPath": "C:\\Users\\wahyu\\.nuget\\packages\\",
-      "outputPath": "D:\\SKILL UPGRADE\\DOT NET ANGULAR\\FiTrack\\backend\\fitrack.api\\obj\\",
+      "outputPath": "D:\\SKILL UPGRADE\\DOT NET ANGULAR\\FiTrack\\backend\\FiTrack.API\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\wahyu\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -3841,8 +3841,8 @@
         "net10.0": {
           "targetAlias": "net10.0",
           "projectReferences": {
-            "D:\\SKILL UPGRADE\\DOT NET ANGULAR\\FiTrack\\backend\\Fitrack.application\\FiTrack.Application.csproj": {
-              "projectPath": "D:\\SKILL UPGRADE\\DOT NET ANGULAR\\FiTrack\\backend\\Fitrack.application\\FiTrack.Application.csproj"
+            "D:\\SKILL UPGRADE\\DOT NET ANGULAR\\FiTrack\\backend\\FiTrack.Application\\FiTrack.Application.csproj": {
+              "projectPath": "D:\\SKILL UPGRADE\\DOT NET ANGULAR\\FiTrack\\backend\\FiTrack.Application\\FiTrack.Application.csproj"
             },
             "D:\\SKILL UPGRADE\\DOT NET ANGULAR\\FiTrack\\backend\\FiTrack.Infrastructure\\FiTrack.Infrastructure.csproj": {
               "projectPath": "D:\\SKILL UPGRADE\\DOT NET ANGULAR\\FiTrack\\backend\\FiTrack.Infrastructure\\FiTrack.Infrastructure.csproj"

@@ -8,6 +8,7 @@ public class Budget
     public Guid Id { get; private set; }
     public Guid UserId { get; private set; }
     public Guid CategoryId { get; private set; }
+    
     public decimal Amount { get; private set; }
     public short Month { get; private set; }
     public short Year { get; private set; }
@@ -33,5 +34,13 @@ public class Budget
             Year = year,
             CreatedAt = DateTime.UtcNow
         };
+    }
+
+    public void Update(Guid categoryId, decimal amount, short month, short year)
+    {
+        CategoryId = categoryId;
+        Amount = amount;
+        Month = month;
+        Year = year;
     }
 }
