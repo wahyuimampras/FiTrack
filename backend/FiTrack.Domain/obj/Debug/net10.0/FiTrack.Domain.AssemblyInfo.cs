@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("FiTrack.Domain")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bb5547b5aac8b5b495449068e3e7319ada96b014")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e22f0970caa5f8f118b4ab76837fd8271c7c0332")]
 [assembly: System.Reflection.AssemblyProductAttribute("FiTrack.Domain")]
 [assembly: System.Reflection.AssemblyTitleAttribute("FiTrack.Domain")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

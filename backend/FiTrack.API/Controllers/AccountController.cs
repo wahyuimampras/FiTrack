@@ -1,7 +1,12 @@
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 using FiTrack.Application.Features.Finance.Commands.CreateAccount;
-using FiTrack.Application.Features.Finance.Queries.GetAccounts;
-using FiTrack.Application.Features.Finance.Commands.UpdateAccount; 
 using FiTrack.Application.Features.Finance.Commands.DeleteAccount;
+using FiTrack.Application.Features.Finance.Commands.UpdateAccount;
+using FiTrack.Application.Features.Finance.Queries.GetAccounts;
+// Tambahkan using ini:
+using FiTrack.Application.Features.Finance.Queries.GetAccountById; 
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,36 +19,45 @@ namespace FiTrack.API.Controllers;
 public class AccountController(IMediator mediator) : ControllerBase
 {
     [HttpGet]
-    public async Task<IActionResult> GetAccounts(CancellationToken ct)
+    public async Task<IActionResult> GetAccounts(CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new GetAccountsQuery(), ct);
+        var result = await mediator.Send(new GetAccountsQuery(), cancellationToken);
         return Ok(result);
     }
 
-    [HttpPost]
-    public async Task<IActionResult> CreateAccount([FromBody] CreateAccountCommand command, CancellationToken ct)
+    // --- TAMBAHKAN ENDPOINT INI ---
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetById(Guid id, CancellationToken cancellationToken)
     {
-        var accountId = await mediator.Send(command, ct);
-        return CreatedAtAction(nameof(GetAccounts), new { id = accountId }, new { Id = accountId });
+        var query = new GetAccountByIdQuery(id);
+        var result = await mediator.Send(query, cancellationToken);
+        return Ok(result);
+    }
+    // ------------------------------
+
+    [HttpPost]
+    public async Task<IActionResult> CreateAccount([FromBody] CreateAccountCommand command, CancellationToken cancellationToken)
+    {
+        var id = await mediator.Send(command, cancellationToken);
+        return CreatedAtAction(nameof(GetAccounts), new { id }, new { Id = id }); // Anda bisa mengganti nameof(GetAccounts) dengan nameof(GetById) nanti
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateAccount(Guid id, [FromBody] UpdateAccountCommand command, CancellationToken ct)
+    public async Task<IActionResult> UpdateAccount(Guid id, [FromBody] UpdateAccountCommand command, CancellationToken cancellationToken)
     {
-        // Validasi keamanan agar ID di URL sama dengan ID di payload body
         if (id != command.Id)
         {
-            return BadRequest("Account ID mismatch between URL and body.");
+            return BadRequest("ID mismatch");
         }
 
-        await mediator.Send(command, ct);
-        return NoContent(); // Mengembalikan 204 No Content (standar sukses untuk Update)
+        await mediator.Send(command, cancellationToken);
+        return NoContent();
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteAccount(Guid id, CancellationToken ct)
+    public async Task<IActionResult> DeleteAccount(Guid id, CancellationToken cancellationToken)
     {
-        await mediator.Send(new DeleteAccountCommand(id), ct);
-        return NoContent(); // Mengembalikan 204 No Content (standar sukses untuk Delete)
+        await mediator.Send(new DeleteAccountCommand(id), cancellationToken);
+        return NoContent();
     }
 }
