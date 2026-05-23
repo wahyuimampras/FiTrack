@@ -1,8 +1,7 @@
-using System;
 using System.Collections.Generic;
-using MediatR;
 using FiTrack.Application.DTOs.Auth;
+using MediatR;
 
 namespace FiTrack.Application.Features.Auth.Queries.GetSessions;
 
-public record GetSessionsQuery : IRequest<List<SessionDto>>;
+public record GetSessionsQuery() : IRequest<IEnumerable<SessionDto>>;

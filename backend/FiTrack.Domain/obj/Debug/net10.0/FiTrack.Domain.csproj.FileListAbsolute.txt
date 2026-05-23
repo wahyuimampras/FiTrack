@@ -5,8 +5,8 @@ D:\SKILL UPGRADE\DOT NET ANGULAR\FiTrack\backend\FiTrack.Domain\obj\Debug\net10.
 D:\SKILL UPGRADE\DOT NET ANGULAR\FiTrack\backend\FiTrack.Domain\obj\Debug\net10.0\FiTrack.Domain.AssemblyInfoInputs.cache
 D:\SKILL UPGRADE\DOT NET ANGULAR\FiTrack\backend\FiTrack.Domain\obj\Debug\net10.0\FiTrack.Domain.AssemblyInfo.cs
 D:\SKILL UPGRADE\DOT NET ANGULAR\FiTrack\backend\FiTrack.Domain\obj\Debug\net10.0\FiTrack.Domain.csproj.CoreCompileInputs.cache
+D:\SKILL UPGRADE\DOT NET ANGULAR\FiTrack\backend\FiTrack.Domain\obj\Debug\net10.0\FiTrack.Domain.sourcelink.json
 D:\SKILL UPGRADE\DOT NET ANGULAR\FiTrack\backend\FiTrack.Domain\obj\Debug\net10.0\FiTrack.Domain.dll
 D:\SKILL UPGRADE\DOT NET ANGULAR\FiTrack\backend\FiTrack.Domain\obj\Debug\net10.0\refint\FiTrack.Domain.dll
 D:\SKILL UPGRADE\DOT NET ANGULAR\FiTrack\backend\FiTrack.Domain\obj\Debug\net10.0\FiTrack.Domain.pdb
 D:\SKILL UPGRADE\DOT NET ANGULAR\FiTrack\backend\FiTrack.Domain\obj\Debug\net10.0\ref\FiTrack.Domain.dll
-D:\SKILL UPGRADE\DOT NET ANGULAR\FiTrack\backend\FiTrack.Domain\obj\Debug\net10.0\FiTrack.Domain.sourcelink.json

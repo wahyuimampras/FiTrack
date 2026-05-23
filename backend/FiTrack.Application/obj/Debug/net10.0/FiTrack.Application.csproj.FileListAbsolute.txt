@@ -8,9 +8,9 @@ D:\SKILL UPGRADE\DOT NET ANGULAR\FiTrack\backend\Fitrack.application\obj\Debug\n
 D:\SKILL UPGRADE\DOT NET ANGULAR\FiTrack\backend\Fitrack.application\obj\Debug\net10.0\FiTrack.Application.AssemblyInfoInputs.cache
 D:\SKILL UPGRADE\DOT NET ANGULAR\FiTrack\backend\Fitrack.application\obj\Debug\net10.0\FiTrack.Application.AssemblyInfo.cs
 D:\SKILL UPGRADE\DOT NET ANGULAR\FiTrack\backend\Fitrack.application\obj\Debug\net10.0\FiTrack.Application.csproj.CoreCompileInputs.cache
+D:\SKILL UPGRADE\DOT NET ANGULAR\FiTrack\backend\Fitrack.application\obj\Debug\net10.0\FiTrack.Application.sourcelink.json
 D:\SKILL UPGRADE\DOT NET ANGULAR\FiTrack\backend\FiTrack.Application\obj\Debug\net10.0\FiTrack..CE525849.Up2Date
 D:\SKILL UPGRADE\DOT NET ANGULAR\FiTrack\backend\Fitrack.application\obj\Debug\net10.0\FiTrack.Application.dll
 D:\SKILL UPGRADE\DOT NET ANGULAR\FiTrack\backend\Fitrack.application\obj\Debug\net10.0\refint\FiTrack.Application.dll
 D:\SKILL UPGRADE\DOT NET ANGULAR\FiTrack\backend\Fitrack.application\obj\Debug\net10.0\FiTrack.Application.pdb
 D:\SKILL UPGRADE\DOT NET ANGULAR\FiTrack\backend\FiTrack.Application\obj\Debug\net10.0\ref\FiTrack.Application.dll
-D:\SKILL UPGRADE\DOT NET ANGULAR\FiTrack\backend\Fitrack.application\obj\Debug\net10.0\FiTrack.Application.sourcelink.json

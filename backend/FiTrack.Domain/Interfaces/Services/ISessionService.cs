@@ -14,5 +14,7 @@ public interface ISessionService
     Task RevokeAllSessionsAsync(Guid userId, CancellationToken ct = default);
     Task<bool> IsSessionActiveAsync(Guid sessionId, CancellationToken ct = default);
     Task RotateRefreshTokenAsync(Guid sessionId, string newRefreshToken, CancellationToken ct = default);
+    
+    // Pastikan ini menggunakan List
     Task<List<UserSession>> GetActiveSessionsAsync(Guid userId, CancellationToken ct = default);
 }

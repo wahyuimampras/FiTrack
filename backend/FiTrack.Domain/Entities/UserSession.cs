@@ -41,8 +41,10 @@ public class UserSession
 
     public void Revoke() => RevokedAt = DateTime.UtcNow;
 
-    public void RotateToken(string newRefreshTokenHash)
+    public void RotateToken(string newRefreshToken, string newRefreshTokenHash)
     {
+        RefreshToken = newRefreshToken;
         RefreshTokenHash = newRefreshTokenHash;
+        ExpiresAt = DateTime.UtcNow.AddDays(7); // Perpanjang masa berlaku
     }
 }
