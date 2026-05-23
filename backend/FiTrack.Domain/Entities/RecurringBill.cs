@@ -37,4 +37,16 @@ public class RecurringBill
             CreatedAt = DateTime.UtcNow
         };
     }
+
+    public void Update(string name, decimal amount, short dueDay, Guid? categoryId, bool isActive)
+    {
+        if (amount < 0) throw new DomainException("Amount cannot be negative");
+        if (dueDay < 1 || dueDay > 31) throw new DomainException("Due day must be between 1 and 31");
+
+        Name = name;
+        Amount = amount;
+        DueDay = dueDay;
+        CategoryId = categoryId;
+        IsActive = isActive;
+    }
 }

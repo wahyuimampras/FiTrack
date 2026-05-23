@@ -43,4 +43,17 @@ public class SavingGoal
             IsCompleted = true;
         }
     }
+    
+    // Tambahkan ini di dalam class SavingGoal (di bawah method AddProgress)
+    public void Update(string name, decimal targetAmount, DateTime? targetDate)
+    {
+        if (targetAmount <= 0) throw new DomainException("Target amount must be positive");
+        
+        Name = name;
+        TargetAmount = targetAmount;
+        TargetDate = targetDate;
+        
+        // Sesuaikan status jika target diubah menjadi lebih kecil/sama dengan current
+        IsCompleted = CurrentAmount >= TargetAmount;
+    }
 }

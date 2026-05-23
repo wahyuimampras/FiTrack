@@ -28,6 +28,8 @@ public static class DependencyInjection
         services.AddScoped<IStravaService, StravaService>();
         services.AddScoped<IAccountRepository, AccountRepository>();
         services.AddScoped<IBudgetRepository, BudgetRepository>();
+        services.AddScoped<IRecurringBillRepository, RecurringBillRepository>();
+        services.AddScoped<ISavingGoalRepository, SavingGoalRepository>();
 
         return services;
     }
