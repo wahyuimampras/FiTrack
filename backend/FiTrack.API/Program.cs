@@ -6,6 +6,9 @@ using FiTrack.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using FiTrack.Application.Behaviors;
+using FluentValidation;
+using MediatR;
 using Scalar.AspNetCore;
 using System.Text;
 
@@ -15,8 +18,19 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddInfrastructure(builder.Configuration);
 
 // Application (MediatR & AutoMapper & FluentValidation)
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(AssemblyReference).Assembly));
+// 2. Application (MediatR & AutoMapper & FluentValidation)
+builder.Services.AddMediatR(cfg => 
+{
+    cfg.RegisterServicesFromAssembly(typeof(AssemblyReference).Assembly);
+    
+    // DAFTARKAN VALIDATION PIPELINE DI SINI
+    cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>)); 
+});
+
 builder.Services.AddAutoMapper(cfg => cfg.AddMaps(typeof(AssemblyReference).Assembly));
+
+// DAFTARKAN SEMUA VALIDATOR SECARA OTOMATIS
+builder.Services.AddValidatorsFromAssembly(typeof(AssemblyReference).Assembly);
 
 // JWT Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

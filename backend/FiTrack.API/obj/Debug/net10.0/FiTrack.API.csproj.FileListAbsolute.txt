@@ -49,7 +49,6 @@ D:\SKILL UPGRADE\DOT NET ANGULAR\FiTrack\backend\fitrack.api\bin\Debug\net10.0\M
 D:\SKILL UPGRADE\DOT NET ANGULAR\FiTrack\backend\fitrack.api\bin\Debug\net10.0\Newtonsoft.Json.dll
 D:\SKILL UPGRADE\DOT NET ANGULAR\FiTrack\backend\fitrack.api\bin\Debug\net10.0\Npgsql.dll
 D:\SKILL UPGRADE\DOT NET ANGULAR\FiTrack\backend\fitrack.api\bin\Debug\net10.0\Npgsql.EntityFrameworkCore.PostgreSQL.dll
-D:\SKILL UPGRADE\DOT NET ANGULAR\FiTrack\backend\fitrack.api\bin\Debug\net10.0\Pipelines.Sockets.Unofficial.dll
 D:\SKILL UPGRADE\DOT NET ANGULAR\FiTrack\backend\fitrack.api\bin\Debug\net10.0\Polly.dll
 D:\SKILL UPGRADE\DOT NET ANGULAR\FiTrack\backend\fitrack.api\bin\Debug\net10.0\Polly.Core.dll
 D:\SKILL UPGRADE\DOT NET ANGULAR\FiTrack\backend\fitrack.api\bin\Debug\net10.0\Scalar.AspNetCore.dll
@@ -62,7 +61,6 @@ D:\SKILL UPGRADE\DOT NET ANGULAR\FiTrack\backend\fitrack.api\bin\Debug\net10.0\S
 D:\SKILL UPGRADE\DOT NET ANGULAR\FiTrack\backend\fitrack.api\bin\Debug\net10.0\Serilog.Sinks.Console.dll
 D:\SKILL UPGRADE\DOT NET ANGULAR\FiTrack\backend\fitrack.api\bin\Debug\net10.0\Serilog.Sinks.Debug.dll
 D:\SKILL UPGRADE\DOT NET ANGULAR\FiTrack\backend\fitrack.api\bin\Debug\net10.0\Serilog.Sinks.File.dll
-D:\SKILL UPGRADE\DOT NET ANGULAR\FiTrack\backend\fitrack.api\bin\Debug\net10.0\StackExchange.Redis.dll
 D:\SKILL UPGRADE\DOT NET ANGULAR\FiTrack\backend\fitrack.api\bin\Debug\net10.0\System.CodeDom.dll
 D:\SKILL UPGRADE\DOT NET ANGULAR\FiTrack\backend\fitrack.api\bin\Debug\net10.0\System.Composition.AttributedModel.dll
 D:\SKILL UPGRADE\DOT NET ANGULAR\FiTrack\backend\fitrack.api\bin\Debug\net10.0\System.Composition.Convention.dll
@@ -70,7 +68,6 @@ D:\SKILL UPGRADE\DOT NET ANGULAR\FiTrack\backend\fitrack.api\bin\Debug\net10.0\S
 D:\SKILL UPGRADE\DOT NET ANGULAR\FiTrack\backend\fitrack.api\bin\Debug\net10.0\System.Composition.Runtime.dll
 D:\SKILL UPGRADE\DOT NET ANGULAR\FiTrack\backend\fitrack.api\bin\Debug\net10.0\System.Composition.TypedParts.dll
 D:\SKILL UPGRADE\DOT NET ANGULAR\FiTrack\backend\fitrack.api\bin\Debug\net10.0\System.IdentityModel.Tokens.Jwt.dll
-D:\SKILL UPGRADE\DOT NET ANGULAR\FiTrack\backend\fitrack.api\bin\Debug\net10.0\System.IO.Hashing.dll
 D:\SKILL UPGRADE\DOT NET ANGULAR\FiTrack\backend\fitrack.api\bin\Debug\net10.0\cs\Microsoft.CodeAnalysis.resources.dll
 D:\SKILL UPGRADE\DOT NET ANGULAR\FiTrack\backend\fitrack.api\bin\Debug\net10.0\de\Microsoft.CodeAnalysis.resources.dll
 D:\SKILL UPGRADE\DOT NET ANGULAR\FiTrack\backend\fitrack.api\bin\Debug\net10.0\es\Microsoft.CodeAnalysis.resources.dll

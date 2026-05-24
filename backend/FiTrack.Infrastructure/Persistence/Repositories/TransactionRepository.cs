@@ -24,6 +24,29 @@ public class TransactionRepository(AppDbContext dbContext) : ITransactionReposit
             .ToListAsync(ct);
     }
 
+    public async Task<(IEnumerable<Transaction> Items, int TotalCount)> GetPagedUserTransactionsAsync(
+        Guid userId, int page, int pageSize, CancellationToken ct = default)
+    {
+        // 1. Buat base query (jangan dieksekusi dulu)
+        var query = dbContext.Transactions
+            .Include(t => t.Account)
+            .Include(t => t.Category)
+            .Where(t => t.UserId == userId)
+            .OrderByDescending(t => t.Date) // Urutkan dari yang terbaru
+            .ThenByDescending(t => t.CreatedAt);
+
+        // 2. Hitung total semua data yang ada (sebelum dipotong)
+        var totalCount = await query.CountAsync(ct);
+
+        // 3. Potong data sesuai halaman yang diminta
+        var items = await query
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync(ct);
+
+        return (items, totalCount);
+    }
+
     public async Task AddAsync(Transaction transaction, CancellationToken ct = default)
     {
         await dbContext.Transactions.AddAsync(transaction, ct);

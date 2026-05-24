@@ -4,5 +4,7 @@
     <Project Path="backend/FiTrack.Application/FiTrack.Application.csproj" />
     <Project Path="backend/FiTrack.Domain/FiTrack.Domain.csproj" />
     <Project Path="backend/FiTrack.Infrastructure/FiTrack.Infrastructure.csproj" />
+    <Project Path="backend/FiTrack.IntegrationTests/FiTrack.IntegrationTests.csproj" />
+    <Project Path="backend/FiTrack.UnitTests/FiTrack.UnitTests.csproj" />
   </Folder>
 </Solution>

@@ -15,9 +15,16 @@ namespace FiTrack.API.Controllers;
 public class TransactionController(ISender mediator) : ControllerBase
 {
     [HttpGet]
-    public async Task<IActionResult> GetTransactions()
+    public async Task<IActionResult> GetAll([FromQuery] int page = 1, [FromQuery] int pageSize = 10, CancellationToken cancellationToken = default)
     {
-        var result = await mediator.Send(new GetTransactionsQuery());
+        // Pastikan angka tidak minus atau 0
+        if (page < 1) page = 1;
+        if (pageSize < 1) pageSize = 10;
+        if (pageSize > 100) pageSize = 100; // Batas maksimal penarikan data agar tidak dijebol
+
+        var query = new GetTransactionsQuery(page, pageSize);
+        var result = await mediator.Send(query, cancellationToken);
+        
         return Ok(result);
     }
 

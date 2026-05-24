@@ -468,19 +468,6 @@
           }
         }
       },
-      "Pipelines.Sockets.Unofficial/2.2.16": {
-        "type": "package",
-        "compile": {
-          "lib/net9.0/Pipelines.Sockets.Unofficial.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net9.0/Pipelines.Sockets.Unofficial.dll": {
-            "related": ".xml"
-          }
-        }
-      },
       "Polly/8.6.6": {
         "type": "package",
         "dependencies": {
@@ -510,24 +497,6 @@
           }
         }
       },
-      "StackExchange.Redis/2.13.1": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.Logging.Abstractions": "8.0.0",
-          "Pipelines.Sockets.Unofficial": "2.2.16",
-          "System.IO.Hashing": "10.0.2"
-        },
-        "compile": {
-          "lib/net10.0/StackExchange.Redis.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/StackExchange.Redis.dll": {
-            "related": ".xml"
-          }
-        }
-      },
       "System.IdentityModel.Tokens.Jwt/8.18.0": {
         "type": "package",
         "dependencies": {
@@ -543,22 +512,6 @@
           "lib/net10.0/System.IdentityModel.Tokens.Jwt.dll": {
             "related": ".xml"
           }
-        }
-      },
-      "System.IO.Hashing/10.0.2": {
-        "type": "package",
-        "compile": {
-          "lib/net10.0/System.IO.Hashing.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/System.IO.Hashing.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net8.0/_._": {}
         }
       },
       "FiTrack.Application/1.0.0": {
@@ -1296,30 +1249,6 @@
         "postgresql.png"
       ]
     },
-    "Pipelines.Sockets.Unofficial/2.2.16": {
-      "sha512": "nonu9l0YrZH6krVYbskBjE7uG0VMAnvOQ9PU+RmzUsy+++vHkqzzCkHRoP877OiA3iRTxJyNDLfpcU8hrJ3/YQ==",
-      "type": "package",
-      "path": "pipelines.sockets.unofficial/2.2.16",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "README.md",
-        "lib/net462/Pipelines.Sockets.Unofficial.dll",
-        "lib/net462/Pipelines.Sockets.Unofficial.xml",
-        "lib/net472/Pipelines.Sockets.Unofficial.dll",
-        "lib/net472/Pipelines.Sockets.Unofficial.xml",
-        "lib/net8.0/Pipelines.Sockets.Unofficial.dll",
-        "lib/net8.0/Pipelines.Sockets.Unofficial.xml",
-        "lib/net9.0/Pipelines.Sockets.Unofficial.dll",
-        "lib/net9.0/Pipelines.Sockets.Unofficial.xml",
-        "lib/netstandard2.0/Pipelines.Sockets.Unofficial.dll",
-        "lib/netstandard2.0/Pipelines.Sockets.Unofficial.xml",
-        "lib/netstandard2.1/Pipelines.Sockets.Unofficial.dll",
-        "lib/netstandard2.1/Pipelines.Sockets.Unofficial.xml",
-        "pipelines.sockets.unofficial.2.2.16.nupkg.sha512",
-        "pipelines.sockets.unofficial.nuspec"
-      ]
-    },
     "Polly/8.6.6": {
       "sha512": "czKHYJ6uGowPijuZt4kgF4njfGvWxVZ8mKBcrZ9iEtwDe9HKdF0ug6p6TwUG8EHuuufgbDU//rSBFebt5/0Fyw==",
       "type": "package",
@@ -1375,30 +1304,6 @@
         "polly.core.nuspec"
       ]
     },
-    "StackExchange.Redis/2.13.1": {
-      "sha512": "jC5wkRe8K6HPoDENUws+fl2d7+GKz+ky8SWEDzYzPx6hHt2EwxWm01gmYPWLzlT49jfYYap0guB5bExtyX9aIQ==",
-      "type": "package",
-      "path": "stackexchange.redis/2.13.1",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "README.md",
-        "lib/net10.0/StackExchange.Redis.dll",
-        "lib/net10.0/StackExchange.Redis.xml",
-        "lib/net461/StackExchange.Redis.dll",
-        "lib/net461/StackExchange.Redis.xml",
-        "lib/net472/StackExchange.Redis.dll",
-        "lib/net472/StackExchange.Redis.xml",
-        "lib/net6.0/StackExchange.Redis.dll",
-        "lib/net6.0/StackExchange.Redis.xml",
-        "lib/net8.0/StackExchange.Redis.dll",
-        "lib/net8.0/StackExchange.Redis.xml",
-        "lib/netstandard2.0/StackExchange.Redis.dll",
-        "lib/netstandard2.0/StackExchange.Redis.xml",
-        "stackexchange.redis.2.13.1.nupkg.sha512",
-        "stackexchange.redis.nuspec"
-      ]
-    },
     "System.IdentityModel.Tokens.Jwt/8.18.0": {
       "sha512": "JxKlBca3/eXeH4koAGjEXOwrBdtwyDXwHXdYT5TQunp64TcVBl4wBCfmlGwhSG017Q/Qrz24leLxV6v2eknnJg==",
       "type": "package",
@@ -1425,39 +1330,10 @@
         "system.identitymodel.tokens.jwt.nuspec"
       ]
     },
-    "System.IO.Hashing/10.0.2": {
-      "sha512": "AKJknIFi9O3+rGExxTry188JPvUoZAPcCtS2qdqyFhIzsxQ1Ap94BeGDG0VzVEHakhmRxmJtVih6TsHoghIt/g==",
-      "type": "package",
-      "path": "system.io.hashing/10.0.2",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "Icon.png",
-        "PACKAGE.md",
-        "THIRD-PARTY-NOTICES.TXT",
-        "buildTransitive/net461/System.IO.Hashing.targets",
-        "buildTransitive/net462/_._",
-        "buildTransitive/net8.0/_._",
-        "buildTransitive/netcoreapp2.0/System.IO.Hashing.targets",
-        "lib/net10.0/System.IO.Hashing.dll",
-        "lib/net10.0/System.IO.Hashing.xml",
-        "lib/net462/System.IO.Hashing.dll",
-        "lib/net462/System.IO.Hashing.xml",
-        "lib/net8.0/System.IO.Hashing.dll",
-        "lib/net8.0/System.IO.Hashing.xml",
-        "lib/net9.0/System.IO.Hashing.dll",
-        "lib/net9.0/System.IO.Hashing.xml",
-        "lib/netstandard2.0/System.IO.Hashing.dll",
-        "lib/netstandard2.0/System.IO.Hashing.xml",
-        "system.io.hashing.10.0.2.nupkg.sha512",
-        "system.io.hashing.nuspec",
-        "useSharedDesignerContext.txt"
-      ]
-    },
     "FiTrack.Application/1.0.0": {
       "type": "project",
-      "path": "../Fitrack.application/FiTrack.Application.csproj",
-      "msbuildProject": "../Fitrack.application/FiTrack.Application.csproj"
+      "path": "../FiTrack.Application/FiTrack.Application.csproj",
+      "msbuildProject": "../FiTrack.Application/FiTrack.Application.csproj"
     },
     "FiTrack.Domain/1.0.0": {
       "type": "project",
@@ -1473,7 +1349,6 @@
       "Microsoft.EntityFrameworkCore >= 10.0.8",
       "Npgsql.EntityFrameworkCore.PostgreSQL >= 10.0.1",
       "Polly >= 8.6.6",
-      "StackExchange.Redis >= 2.13.1",
       "System.IdentityModel.Tokens.Jwt >= 8.18.0"
     ]
   },
@@ -1502,8 +1377,8 @@
         "net10.0": {
           "targetAlias": "net10.0",
           "projectReferences": {
-            "D:\\SKILL UPGRADE\\DOT NET ANGULAR\\FiTrack\\backend\\Fitrack.application\\FiTrack.Application.csproj": {
-              "projectPath": "D:\\SKILL UPGRADE\\DOT NET ANGULAR\\FiTrack\\backend\\Fitrack.application\\FiTrack.Application.csproj"
+            "D:\\SKILL UPGRADE\\DOT NET ANGULAR\\FiTrack\\backend\\FiTrack.Application\\FiTrack.Application.csproj": {
+              "projectPath": "D:\\SKILL UPGRADE\\DOT NET ANGULAR\\FiTrack\\backend\\FiTrack.Application\\FiTrack.Application.csproj"
             }
           }
         }
@@ -1543,10 +1418,6 @@
           "Polly": {
             "target": "Package",
             "version": "[8.6.6, )"
-          },
-          "StackExchange.Redis": {
-            "target": "Package",
-            "version": "[2.13.1, )"
           },
           "System.IdentityModel.Tokens.Jwt": {
             "target": "Package",

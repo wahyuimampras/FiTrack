@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "T8vrZ0y4GKM=",
+  "dgSpecHash": "Xz8Nc9SEM6M=",
   "success": true,
   "projectFilePath": "D:\\SKILL UPGRADE\\DOT NET ANGULAR\\FiTrack\\backend\\FiTrack.Infrastructure\\FiTrack.Infrastructure.csproj",
   "expectedPackageFiles": [
@@ -32,12 +32,9 @@
     "C:\\Users\\wahyu\\.nuget\\packages\\microsoft.identitymodel.tokens\\8.18.0\\microsoft.identitymodel.tokens.8.18.0.nupkg.sha512",
     "C:\\Users\\wahyu\\.nuget\\packages\\npgsql\\10.0.2\\npgsql.10.0.2.nupkg.sha512",
     "C:\\Users\\wahyu\\.nuget\\packages\\npgsql.entityframeworkcore.postgresql\\10.0.1\\npgsql.entityframeworkcore.postgresql.10.0.1.nupkg.sha512",
-    "C:\\Users\\wahyu\\.nuget\\packages\\pipelines.sockets.unofficial\\2.2.16\\pipelines.sockets.unofficial.2.2.16.nupkg.sha512",
     "C:\\Users\\wahyu\\.nuget\\packages\\polly\\8.6.6\\polly.8.6.6.nupkg.sha512",
     "C:\\Users\\wahyu\\.nuget\\packages\\polly.core\\8.6.6\\polly.core.8.6.6.nupkg.sha512",
-    "C:\\Users\\wahyu\\.nuget\\packages\\stackexchange.redis\\2.13.1\\stackexchange.redis.2.13.1.nupkg.sha512",
-    "C:\\Users\\wahyu\\.nuget\\packages\\system.identitymodel.tokens.jwt\\8.18.0\\system.identitymodel.tokens.jwt.8.18.0.nupkg.sha512",
-    "C:\\Users\\wahyu\\.nuget\\packages\\system.io.hashing\\10.0.2\\system.io.hashing.10.0.2.nupkg.sha512"
+    "C:\\Users\\wahyu\\.nuget\\packages\\system.identitymodel.tokens.jwt\\8.18.0\\system.identitymodel.tokens.jwt.8.18.0.nupkg.sha512"
   ],
   "logs": []
 }

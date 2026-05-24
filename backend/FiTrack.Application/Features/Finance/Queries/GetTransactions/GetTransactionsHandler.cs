@@ -1,4 +1,9 @@
+using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using AutoMapper;
+using FiTrack.Application.DTOs.Common;
 using FiTrack.Application.DTOs.Finance;
 using FiTrack.Application.Interfaces;
 using FiTrack.Domain.Interfaces.Repositories;
@@ -9,11 +14,21 @@ namespace FiTrack.Application.Features.Finance.Queries.GetTransactions;
 public class GetTransactionsHandler(
     ITransactionRepository transactionRepository,
     ICurrentUserService currentUserService,
-    IMapper mapper) : IRequestHandler<GetTransactionsQuery, IEnumerable<TransactionDto>>
+    IMapper mapper) : IRequestHandler<GetTransactionsQuery, PagedResult<TransactionDto>>
 {
-    public async Task<IEnumerable<TransactionDto>> Handle(GetTransactionsQuery request, CancellationToken cancellationToken)
+    public async Task<PagedResult<TransactionDto>> Handle(GetTransactionsQuery request, CancellationToken cancellationToken)
     {
-        var transactions = await transactionRepository.GetUserTransactionsAsync(currentUserService.UserId, cancellationToken);
-        return mapper.Map<IEnumerable<TransactionDto>>(transactions);
+        var userId = currentUserService.UserId;
+        if (userId == Guid.Empty) throw new UnauthorizedAccessException("User is not authenticated.");
+
+        // Ambil data Paged dari Repository
+        var (items, totalCount) = await transactionRepository.GetPagedUserTransactionsAsync(
+            userId, request.Page, request.PageSize, cancellationToken);
+
+        // Map ke DTO
+        var dtos = mapper.Map<IEnumerable<TransactionDto>>(items);
+
+        // Bungkus dengan PagedResult
+        return new PagedResult<TransactionDto>(dtos, totalCount, request.Page, request.PageSize);
     }
 }

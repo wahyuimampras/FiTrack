@@ -577,14 +577,6 @@
           }
         }
       },
-      "Pipelines.Sockets.Unofficial/2.2.16": {
-        "runtime": {
-          "lib/net9.0/Pipelines.Sockets.Unofficial.dll": {
-            "assemblyVersion": "1.0.0.0",
-            "fileVersion": "2.2.16.21791"
-          }
-        }
-      },
       "Polly/8.6.6": {
         "dependencies": {
           "Polly.Core": "8.6.6"
@@ -716,18 +708,6 @@
           }
         }
       },
-      "StackExchange.Redis/2.13.1": {
-        "dependencies": {
-          "Pipelines.Sockets.Unofficial": "2.2.16",
-          "System.IO.Hashing": "10.0.2"
-        },
-        "runtime": {
-          "lib/net10.0/StackExchange.Redis.dll": {
-            "assemblyVersion": "2.0.0.0",
-            "fileVersion": "2.13.1.38939"
-          }
-        }
-      },
       "System.CodeDom/6.0.0": {
         "runtime": {
           "lib/net6.0/System.CodeDom.dll": {
@@ -808,14 +788,6 @@
           }
         }
       },
-      "System.IO.Hashing/10.0.2": {
-        "runtime": {
-          "lib/net10.0/System.IO.Hashing.dll": {
-            "assemblyVersion": "10.0.0.2",
-            "fileVersion": "10.0.225.61305"
-          }
-        }
-      },
       "FiTrack.Application/1.0.0": {
         "dependencies": {
           "AutoMapper": "16.1.1",
@@ -848,7 +820,6 @@
           "Microsoft.EntityFrameworkCore": "10.0.8",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "10.0.1",
           "Polly": "8.6.6",
-          "StackExchange.Redis": "2.13.1",
           "System.IdentityModel.Tokens.Jwt": "8.18.0"
         },
         "runtime": {
@@ -1097,13 +1068,6 @@
       "path": "npgsql.entityframeworkcore.postgresql/10.0.1",
       "hashPath": "npgsql.entityframeworkcore.postgresql.10.0.1.nupkg.sha512"
     },
-    "Pipelines.Sockets.Unofficial/2.2.16": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-nonu9l0YrZH6krVYbskBjE7uG0VMAnvOQ9PU+RmzUsy+++vHkqzzCkHRoP877OiA3iRTxJyNDLfpcU8hrJ3/YQ==",
-      "path": "pipelines.sockets.unofficial/2.2.16",
-      "hashPath": "pipelines.sockets.unofficial.2.2.16.nupkg.sha512"
-    },
     "Polly/8.6.6": {
       "type": "package",
       "serviceable": true,
@@ -1188,13 +1152,6 @@
       "path": "serilog.sinks.file/7.0.0",
       "hashPath": "serilog.sinks.file.7.0.0.nupkg.sha512"
     },
-    "StackExchange.Redis/2.13.1": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-jC5wkRe8K6HPoDENUws+fl2d7+GKz+ky8SWEDzYzPx6hHt2EwxWm01gmYPWLzlT49jfYYap0guB5bExtyX9aIQ==",
-      "path": "stackexchange.redis/2.13.1",
-      "hashPath": "stackexchange.redis.2.13.1.nupkg.sha512"
-    },
     "System.CodeDom/6.0.0": {
       "type": "package",
       "serviceable": true,
@@ -1250,13 +1207,6 @@
       "sha512": "sha512-JxKlBca3/eXeH4koAGjEXOwrBdtwyDXwHXdYT5TQunp64TcVBl4wBCfmlGwhSG017Q/Qrz24leLxV6v2eknnJg==",
       "path": "system.identitymodel.tokens.jwt/8.18.0",
       "hashPath": "system.identitymodel.tokens.jwt.8.18.0.nupkg.sha512"
-    },
-    "System.IO.Hashing/10.0.2": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-AKJknIFi9O3+rGExxTry188JPvUoZAPcCtS2qdqyFhIzsxQ1Ap94BeGDG0VzVEHakhmRxmJtVih6TsHoghIt/g==",
-      "path": "system.io.hashing/10.0.2",
-      "hashPath": "system.io.hashing.10.0.2.nupkg.sha512"
     },
     "FiTrack.Application/1.0.0": {
       "type": "project",
