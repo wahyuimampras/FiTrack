@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using FiTrack.Domain.Exceptions;
 
 namespace FiTrack.Domain.Entities;
 
@@ -46,5 +47,20 @@ public class User
     public void DisconnectStrava()
     {
         StravaAthleteId = null;
+    }
+
+    public void UpdateProfile(string username, string email)
+    {
+        if (string.IsNullOrWhiteSpace(username)) throw new DomainException("Username tidak boleh kosong.");
+        if (string.IsNullOrWhiteSpace(email)) throw new DomainException("Email tidak boleh kosong.");
+        
+        Username = username;
+        Email = email;
+    }
+
+    public void UpdatePassword(string newPasswordHash)
+    {
+        if (string.IsNullOrWhiteSpace(newPasswordHash)) throw new DomainException("Password baru tidak valid.");
+        PasswordHash = newPasswordHash;
     }
 }

@@ -1,6 +1,10 @@
 using FiTrack.Application.Features.Auth.Commands.Login;
 using FiTrack.Application.Features.Auth.Commands.Register;
 using FiTrack.Domain.Interfaces.Services;
+using FiTrack.Application.Features.Auth.Commands.Logout;
+using FiTrack.Application.Features.Auth.Commands.RevokeSession;
+using FiTrack.Application.Features.Auth.Commands.RevokeAllSessions;
+using FiTrack.Application.Features.Auth.Queries.GetSessions;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -80,17 +84,39 @@ public class AuthController(ISender mediator, ITokenService tokenService, ISessi
     }
 
     [HttpPost("logout")]
-    [Authorize]
-    public async Task<IActionResult> Logout()
+    public async Task<IActionResult> Logout([FromBody] LogoutCommand command, CancellationToken cancellationToken)
     {
-        var refreshToken = Request.Cookies["refreshToken"];
-        if (refreshToken != null)
-        {
-            var session = await sessionService.ValidateRefreshTokenAsync(refreshToken);
-            if (session != null) await sessionService.RevokeSessionAsync(session.Id);
-        }
+        // Endpoint ini sengaja tidak diberi [Authorize] agar 
+        // meskipun AccessToken sudah expired, frontend tetap bisa logout 
+        // dengan mengirimkan RefreshToken yang masih hidup.
+        await mediator.Send(command, cancellationToken);
+        return NoContent(); // 204 No Content
+    }
 
-        Response.Cookies.Delete("refreshToken");
-        return Ok(new { message = "Logged out successfully" });
+    [Authorize]
+    [HttpGet("sessions")]
+    public async Task<IActionResult> GetSessions(CancellationToken cancellationToken)
+    {
+        // Mengambil daftar device yang sedang login
+        var result = await mediator.Send(new GetSessionsQuery(), cancellationToken);
+        return Ok(result);
+    }
+
+    [Authorize]
+    [HttpDelete("sessions/{id}")]
+    public async Task<IActionResult> RevokeSession(Guid id, CancellationToken cancellationToken)
+    {
+        // Menendang device tertentu (berguna untuk tombol "Logout from this device" di UI Active Sessions)
+        await mediator.Send(new RevokeSessionCommand(id), cancellationToken);
+        return NoContent();
+    }
+
+    [Authorize]
+    [HttpDelete("sessions")]
+    public async Task<IActionResult> RevokeAllSessions(CancellationToken cancellationToken)
+    {
+        // Tombol Panic: "Logout from all devices"
+        await mediator.Send(new RevokeAllSessionsCommand(), cancellationToken);
+        return NoContent();
     }
 }

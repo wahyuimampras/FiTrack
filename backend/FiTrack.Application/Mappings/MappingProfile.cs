@@ -15,5 +15,6 @@ public class MappingProfile : Profile
         CreateMap<RecurringBill, RecurringBillDto>().ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category != null ? src.Category.Name : null));
         CreateMap<SavingGoal, SavingGoalDto>();
         CreateMap<UserSession, SessionDto>();
+        CreateMap<User, UserProfileDto>();
     }
 }
