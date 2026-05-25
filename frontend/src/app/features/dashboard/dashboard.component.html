@@ -1,0 +1,353 @@
+<div class="dashboard-page">
+
+  <!-- ── PAGE HEADER ─────────────────────────────── -->
+  <div class="dash-header">
+    <div>
+      <h1 class="dash-title">Dashboard</h1>
+      <p class="dash-subtitle">{{ monthLabel }}</p>
+    </div>
+    <button class="btn btn-secondary btn-sm" (click)="refresh()" [disabled]="loading()">
+      <span>↻</span> Refresh
+    </button>
+  </div>
+
+  <!-- ── SKELETON LOADING ─────────────────────────── -->
+  @if (loading()) {
+    <div class="dash-grid">
+      @for (i of [1,2,3,4]; track i) {
+        <nz-skeleton [nzActive]="true" [nzParagraph]="{ rows: 2 }"
+          style="background:white; border-radius:16px; padding:20px"/>
+      }
+    </div>
+    <nz-skeleton [nzActive]="true" [nzParagraph]="{ rows: 4 }"
+      style="background:white; border-radius:16px; padding:24px; margin-top:16px"/>
+  }
+
+  @if (!loading()) {
+
+    <!-- ── HERO CARD (Total Saldo) ──────────────────── -->
+    <div class="hero-card">
+      <div class="hero-card-left">
+        <p class="hero-label">Total Saldo Rekening</p>
+        <div class="hero-balance">{{ formatRupiah(totalAccountBalance()) }}</div>
+        <div class="hero-meta">
+          @if (netBalance() >= 0) {
+            <span class="hero-badge hero-badge-up">
+              ↑ +{{ formatRupiah(netBalance()) }} bulan ini
+            </span>
+          } @else {
+            <span class="hero-badge hero-badge-down">
+              ↓ {{ formatRupiah(netBalance()) }} bulan ini
+            </span>
+          }
+          <span class="hero-period">{{ monthLabel }}</span>
+        </div>
+      </div>
+      <div class="hero-card-right">
+        <div class="hero-stat">
+          <span class="hero-stat-label">Tabungan</span>
+          <span class="hero-stat-value hero-stat-green">{{ savingsRate() }}%</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hero-stat-label">Aktivitas</span>
+          <span class="hero-stat-value">{{ summary()?.totalActivities ?? 0 }}x</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hero-stat-label">Jarak</span>
+          <span class="hero-stat-value">{{ (summary()?.totalDistanceKm ?? 0) | number:'1.1-1' }} km</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── STAT CARDS (4 kolom) ──────────────────────── -->
+    <div class="stat-grid">
+
+      <!-- Income -->
+      <div class="stat-card">
+        <div class="stat-card-header">
+          <div class="stat-icon stat-icon-income">↑</div>
+          <span class="stat-label">Pemasukan</span>
+        </div>
+        <div class="stat-value stat-value-income">
+          {{ formatRupiah(summary()?.totalIncome ?? 0) }}
+        </div>
+        <p class="stat-desc">Total pemasukan {{ monthLabel }}</p>
+      </div>
+
+      <!-- Expense -->
+      <div class="stat-card">
+        <div class="stat-card-header">
+          <div class="stat-icon stat-icon-expense">↓</div>
+          <span class="stat-label">Pengeluaran</span>
+        </div>
+        <div class="stat-value stat-value-expense">
+          {{ formatRupiah(summary()?.totalExpense ?? 0) }}
+        </div>
+        <p class="stat-desc">Total pengeluaran {{ monthLabel }}</p>
+      </div>
+
+      <!-- Workout -->
+      <div class="stat-card">
+        <div class="stat-card-header">
+          <div class="stat-icon stat-icon-workout">🏃</div>
+          <span class="stat-label">Aktivitas</span>
+        </div>
+        <div class="stat-value">
+          {{ summary()?.totalActivities ?? 0 }}
+          <span class="stat-unit">sesi</span>
+        </div>
+        <p class="stat-desc">{{ (summary()?.totalDistanceKm ?? 0) | number:'1.1-1' }} km · {{ summary()?.totalCaloriesBurned ?? 0 | number }} kal</p>
+      </div>
+
+      <!-- Net -->
+      <div class="stat-card">
+        <div class="stat-card-header">
+          <div class="stat-icon" [class]="netBalance() >= 0 ? 'stat-icon-income' : 'stat-icon-expense'">
+            {{ netBalance() >= 0 ? '↑' : '↓' }}
+          </div>
+          <span class="stat-label">Net Bulan Ini</span>
+        </div>
+        <div class="stat-value" [class]="netBalance() >= 0 ? 'stat-value-income' : 'stat-value-expense'">
+          {{ formatRupiah(netBalance()) }}
+        </div>
+        <p class="stat-desc">Tingkat tabungan {{ savingsRate() }}%</p>
+      </div>
+
+    </div>
+
+    <!-- ── MIDDLE ROW ────────────────────────────────── -->
+    <div class="mid-grid">
+
+      <!-- Rekening -->
+      <div class="dash-card">
+        <div class="card-header">
+          <h3 class="card-title">💳 Rekening</h3>
+          <a routerLink="/accounts" class="card-link">Lihat semua ↗</a>
+        </div>
+
+        @if (accounts().length === 0) {
+          <div class="empty-state">
+            <p>Belum ada rekening</p>
+            <a routerLink="/accounts" class="btn btn-primary btn-sm">+ Tambah Rekening</a>
+          </div>
+        }
+
+        @for (account of accounts(); track account.id) {
+          <div class="account-row">
+            <div class="account-row-left">
+              <div class="account-icon">{{ getAccountIcon(account.type) }}</div>
+              <div>
+                <div class="account-name">{{ account.name }}</div>
+                <div class="account-type">{{ account.type }}</div>
+              </div>
+            </div>
+            <div class="account-balance">{{ formatRupiah(account.balance) }}</div>
+          </div>
+        }
+      </div>
+
+      <!-- Expense by Category (donut-like bar) -->
+      <div class="dash-card">
+        <div class="card-header">
+          <h3 class="card-title">📊 Pengeluaran per Kategori</h3>
+          <a routerLink="/transactions" class="card-link">Detail ↗</a>
+        </div>
+
+        @if (topExpenseCategories().length === 0) {
+          <div class="empty-state">
+            <p>Belum ada data pengeluaran</p>
+          </div>
+        }
+
+        @for (cat of topExpenseCategories(); track cat.category) {
+          <div class="cat-row">
+            <div class="cat-row-top">
+              <span class="cat-name">{{ cat.category }}</span>
+              <span class="cat-amount">{{ formatRupiah(cat.amount) }}</span>
+            </div>
+            <div class="cat-bar-track">
+              <div class="cat-bar-fill"
+                [style.width.%]="summary()?.totalExpense
+                  ? (cat.amount / summary()!.totalExpense * 100)
+                  : 0">
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+
+      <!-- Workout Summary -->
+      <div class="dash-card">
+        <div class="card-header">
+          <h3 class="card-title">⚡ Workout Bulan Ini</h3>
+          <a routerLink="/activities" class="card-link">Lihat ↗</a>
+        </div>
+
+        @if ((summary()?.activityByType?.length ?? 0) === 0) {
+          <div class="empty-state">
+            <p>Belum ada aktivitas</p>
+            <a routerLink="/strava" class="btn btn-primary btn-sm">Sync Strava</a>
+          </div>
+        }
+
+        @for (act of summary()?.activityByType ?? []; track act.type) {
+          <div class="workout-row">
+            <div class="workout-icon">{{ getActivityIcon(act.type) }}</div>
+            <div class="workout-info">
+              <span class="workout-type">{{ act.type }}</span>
+              <span class="workout-count">{{ act.count }} sesi</span>
+            </div>
+          </div>
+        }
+
+        @if ((summary()?.totalDistanceKm ?? 0) > 0) {
+          <nz-divider style="margin: 12px 0"/>
+          <div class="workout-total-row">
+            <div class="workout-total-item">
+              <span class="wt-label">Total Jarak</span>
+              <span class="wt-value">{{ (summary()?.totalDistanceKm ?? 0) | number:'1.1-1' }} km</span>
+            </div>
+            <div class="workout-total-item">
+              <span class="wt-label">Kalori</span>
+              <span class="wt-value">{{ summary()?.totalCaloriesBurned ?? 0 | number }} kal</span>
+            </div>
+          </div>
+        }
+      </div>
+
+    </div>
+
+    <!-- ── BOTTOM ROW ────────────────────────────────── -->
+    <div class="bottom-grid">
+
+      <!-- Transaksi Terbaru -->
+      <div class="dash-card dash-card-wide">
+        <div class="card-header">
+          <h3 class="card-title">💸 Transaksi Terbaru</h3>
+          <a routerLink="/transactions" class="card-link">Lihat semua ↗</a>
+        </div>
+
+        @if (transactions().length === 0) {
+          <div class="empty-state">
+            <p>Belum ada transaksi bulan ini</p>
+            <a routerLink="/transactions" class="btn btn-primary btn-sm">+ Tambah Transaksi</a>
+          </div>
+        }
+
+        @if (transactions().length > 0) {
+          <table class="tx-table">
+            <thead>
+              <tr>
+                <th>Deskripsi</th>
+                <th>Tipe</th>
+                <th>Tanggal</th>
+                <th style="text-align:right">Jumlah</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (tx of transactions(); track tx.id) {
+                <tr class="tx-row">
+                  <td>
+                    <div class="tx-desc">{{ tx.description }}</div>
+                    @if (tx.notes) {
+                      <div class="tx-notes">{{ tx.notes }}</div>
+                    }
+                  </td>
+                  <td>
+                    <span class="tx-badge"
+                      [class]="tx.type === 'Income' ? 'tx-badge-income' :
+                               tx.type === 'Expense' ? 'tx-badge-expense' : 'tx-badge-transfer'">
+                      {{ getTxTypeLabel(tx.type) }}
+                    </span>
+                  </td>
+                  <td class="tx-date">{{ formatDate(tx.date) }}</td>
+                  <td class="tx-amount"
+                    [class]="tx.type === 'Income' ? 'tx-amount-income' : 'tx-amount-expense'"
+                    style="text-align:right">
+                    {{ tx.type === 'Income' ? '+' : '-' }}{{ formatRupiah(tx.amount) }}
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        }
+      </div>
+
+      <!-- Budget & Saving Goals -->
+      <div class="dash-card-stack">
+
+        <!-- Budgets -->
+        <div class="dash-card">
+          <div class="card-header">
+            <h3 class="card-title">📋 Budget Bulan Ini</h3>
+            <a routerLink="/budgets" class="card-link">Kelola ↗</a>
+          </div>
+
+          @if (activeBudgets().length === 0) {
+            <div class="empty-state">
+              <p>Belum ada budget</p>
+              <a routerLink="/budgets" class="btn btn-primary btn-sm">+ Set Budget</a>
+            </div>
+          }
+
+          @for (budget of activeBudgets(); track budget.id) {
+            <div class="budget-item">
+              <div class="budget-item-top">
+                <span class="budget-cat">{{ budget.categoryName }}</span>
+                <span class="budget-amount">
+                  {{ formatRupiah(budget.spent ?? 0) }} /
+                  <span style="color:var(--text-muted)">{{ formatRupiah(budget.amount) }}</span>
+                </span>
+              </div>
+              <nz-progress
+                [nzPercent]="getBudgetPercent(budget)"
+                [nzStatus]="getBudgetStatus(budget)"
+                [nzStrokeColor]="getBudgetColor(budget)"
+                nzSize="small"
+                [nzShowInfo]="false"
+              />
+            </div>
+          }
+        </div>
+
+        <!-- Saving Goals -->
+        <div class="dash-card" style="margin-top: 16px">
+          <div class="card-header">
+            <h3 class="card-title">🎯 Target Tabungan</h3>
+            <a routerLink="/saving-goals" class="card-link">Lihat ↗</a>
+          </div>
+
+          @if (activeSavingGoals().length === 0) {
+            <div class="empty-state">
+              <p>Belum ada target tabungan</p>
+              <a routerLink="/saving-goals" class="btn btn-primary btn-sm">+ Buat Target</a>
+            </div>
+          }
+
+          @for (goal of activeSavingGoals(); track goal.id) {
+            <div class="goal-item">
+              <div class="goal-item-top">
+                <span class="goal-name">{{ goal.name }}</span>
+                <span class="goal-pct">{{ getSavingPercent(goal) }}%</span>
+              </div>
+              <nz-progress
+                [nzPercent]="getSavingPercent(goal)"
+                nzStatus="active"
+                nzStrokeColor="#285A48"
+                nzSize="small"
+                [nzShowInfo]="false"
+              />
+              <div class="goal-amounts">
+                <span>{{ formatRupiah(goal.currentAmount) }}</span>
+                <span style="color:var(--text-muted)">dari {{ formatRupiah(goal.targetAmount) }}</span>
+              </div>
+            </div>
+          }
+        </div>
+
+      </div>
+    </div>
+
+  } <!-- end !loading -->
+
+</div>
