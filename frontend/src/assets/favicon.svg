@@ -1,0 +1,44 @@
+<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2d7a5a"/>
+      <stop offset="100%" stop-color="#0f3d28"/>
+    </linearGradient>
+    <linearGradient id="leafG" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7ee8a2"/>
+      <stop offset="100%" stop-color="#2ecc71"/>
+    </linearGradient>
+    <filter id="softShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#0a1a14" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+
+  <!-- Background rounded square -->
+  <rect width="64" height="64" rx="14" fill="url(#bgGrad)"/>
+
+  <!-- Subtle inner highlight -->
+  <rect x="1" y="1" width="62" height="31" rx="13"
+        fill="white" opacity="0.05"/>
+
+  <!-- Main leaf: growth / nature / finance -->
+  <path d="M32 50 C32 50 14 38 16 22 C16 22 25 18 34 25 C39 29 40 38 32 50Z"
+        fill="url(#leafG)" filter="url(#softShadow)"/>
+
+  <!-- Secondary leaf (right side) -->
+  <path d="M32 50 C32 50 46 36 46 22 C46 22 53 24 51 33 C49 41 40 47 32 50Z"
+        fill="white" opacity="0.18"/>
+
+  <!-- Stem -->
+  <line x1="32" y1="50" x2="32" y2="56"
+        stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
+
+  <!-- Heartbeat / pulse line overlay — fitness tracking symbol -->
+  <polyline
+    points="10,34 15,34 19,24 23,43 27,32 31,34 40,34 44,34"
+    fill="none"
+    stroke="white"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    opacity="0.55"/>
+</svg>

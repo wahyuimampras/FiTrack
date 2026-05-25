@@ -1,0 +1,157 @@
+<div class="auth-shell">
+
+  <!-- LEFT PANEL -->
+  <div class="auth-brand">
+    <div class="auth-brand-inner">
+      <div class="auth-logo">
+        <img src="assets/favicon.svg" alt="FiTrack" width="48" height="48">
+        <span class="auth-logo-text">FiTrack</span>
+      </div>
+      <h1 class="auth-tagline">
+        Mulai perjalanan<br>finansial &amp; atletikmu.
+      </h1>
+      <p class="auth-sub">
+        Buat akun sekali, simpan semua data keuangan dan latihan kamu secara lokal dan aman.
+      </p>
+      <div class="auth-features">
+        <span class="auth-feature-pill">💰 Lacak Pengeluaran</span>
+        <span class="auth-feature-pill">🎯 Atur Anggaran</span>
+        <span class="auth-feature-pill">🏃 Sinkron Strava</span>
+        <span class="auth-feature-pill">📊 Lihat Progres</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="auth-form-panel">
+    <div class="auth-form-card">
+
+      <!-- Success State -->
+      @if (success()) {
+        <nz-result
+          nzStatus="success"
+          nzTitle="Akun berhasil dibuat!"
+          nzSubTitle="Selamat datang di FiTrack. Silakan login untuk mulai."
+        >
+          <div nz-result-extra>
+            <button nz-button nzType="primary" class="auth-submit-btn" (click)="goToLogin()">
+              Pergi ke halaman Login
+            </button>
+          </div>
+        </nz-result>
+      }
+
+      <!-- Form State -->
+      @if (!success()) {
+        <div class="auth-form-header">
+          <h2 class="auth-form-title">Buat akun baru</h2>
+          <p class="auth-form-subtitle">Gratis, lokal, dan 100% milik kamu</p>
+        </div>
+
+        @if (errorMsg()) {
+          <nz-alert
+            nzType="error"
+            [nzMessage]="errorMsg()!"
+            nzShowIcon
+            class="auth-alert"
+          />
+        }
+
+        <form nz-form [formGroup]="form" (ngSubmit)="submit()" nzLayout="vertical">
+
+          <!-- Username -->
+          <nz-form-item>
+            <nz-form-label nzRequired>Username</nz-form-label>
+            <nz-form-control [nzErrorTip]="usernameErrors">
+              <nz-input-group nzPrefixIcon="user">
+                <input
+                  nz-input
+                  formControlName="username"
+                  placeholder="contoh: wahyu_runner"
+                  autocomplete="username"
+                />
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+
+          <!-- Email -->
+          <nz-form-item>
+            <nz-form-label nzRequired>Email</nz-form-label>
+            <nz-form-control nzErrorTip="Masukkan email yang valid">
+              <nz-input-group nzPrefixIcon="mail">
+                <input
+                  nz-input
+                  formControlName="email"
+                  type="email"
+                  placeholder="contoh: wahyu@email.com"
+                  autocomplete="email"
+                />
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+
+          <!-- Password -->
+          <nz-form-item>
+            <nz-form-label nzRequired>Password</nz-form-label>
+            <nz-form-control [nzErrorTip]="passwordErrors">
+              <nz-input-group nzPrefixIcon="lock" [nzSuffix]="pwSuffix">
+                <input
+                  nz-input
+                  formControlName="password"
+                  [type]="showPassword() ? 'text' : 'password'"
+                  placeholder="Minimal 8 karakter"
+                  autocomplete="new-password"
+                />
+              </nz-input-group>
+              <ng-template #pwSuffix>
+                <span nz-icon [nzType]="showPassword() ? 'eye-invisible' : 'eye'"
+                  class="auth-eye-icon" (click)="showPassword.set(!showPassword())">
+                </span>
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+
+          <!-- Confirm Password -->
+          <nz-form-item>
+            <nz-form-label nzRequired>Konfirmasi Password</nz-form-label>
+            <nz-form-control [nzErrorTip]="confirmErrors">
+              <nz-input-group nzPrefixIcon="lock" [nzSuffix]="confirmSuffix">
+                <input
+                  nz-input
+                  formControlName="confirmPassword"
+                  [type]="showConfirm() ? 'text' : 'password'"
+                  placeholder="Ulangi password"
+                  autocomplete="new-password"
+                />
+              </nz-input-group>
+              <ng-template #confirmSuffix>
+                <span nz-icon [nzType]="showConfirm() ? 'eye-invisible' : 'eye'"
+                  class="auth-eye-icon" (click)="showConfirm.set(!showConfirm())">
+                </span>
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+
+          <!-- Submit -->
+          <button
+            nz-button
+            nzType="primary"
+            nzBlock
+            [nzLoading]="loading()"
+            class="auth-submit-btn"
+          >
+            {{ loading() ? 'Membuat akun...' : 'Buat Akun' }}
+          </button>
+
+        </form>
+
+        <p class="auth-footer-text">
+          Sudah punya akun?
+          <a routerLink="/auth/login" class="auth-link">Masuk di sini</a>
+        </p>
+      }
+
+    </div>
+  </div>
+
+</div>

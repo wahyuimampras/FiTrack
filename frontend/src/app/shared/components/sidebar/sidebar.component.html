@@ -1,0 +1,52 @@
+<aside class="sidebar" [class.collapsed]="layoutService.isSidebarCollapsed()">
+  <div class="sidebar-logo">
+    @if (!layoutService.isSidebarCollapsed()) {
+      <div class="logo-brand">
+        <img src="assets/favicon.svg" alt="" width="32" height="32">
+        <span class="sidebar-logo-text">FiTrack</span>
+      </div>
+    }
+    <button class="sidebar-toggle-btn" (click)="layoutService.toggleSidebar()" title="Toggle Sidebar">
+      @if (layoutService.isSidebarCollapsed()) {
+        ☰
+      } @else {
+        ✕
+      }
+    </button>
+  </div>
+
+  <nav class="sidebar-nav">
+    @for (group of navGroups; track group.label) {
+      <p class="sidebar-section-label">{{ group.label }}</p>
+      @for (item of group.items; track item.route) {
+        <a class="nav-item"
+           [routerLink]="item.route"
+           routerLinkActive="active"
+           [routerLinkActiveOptions]="{ exact: item.route === '/dashboard' }">
+          <span class="nav-item-icon">{{ item.icon }}</span>
+          <span>{{ item.label }}</span>
+          @if (item.badge) {
+            <span class="nav-badge">{{ item.badge.text }}</span>
+          }
+        </a>
+      }
+    }
+  </nav>
+
+  <div style="flex:1"></div>
+
+  <div class="sidebar-bottom">
+    <a class="nav-item" routerLink="/settings" routerLinkActive="active">
+      <span class="nav-item-icon">⚙️</span>
+      <span>Settings</span>
+    </a>
+  </div>
+
+  <div class="sidebar-user-card">
+    <div class="sidebar-avatar">{{ authService.currentUser()?.username?.charAt(0)?.toUpperCase() || 'U' }}</div>
+    <div>
+      <div class="sidebar-user-name">{{ authService.currentUser()?.username || 'Guest' }}</div>
+      <div class="sidebar-user-email">{{ authService.currentUser()?.email || '' }}</div>
+    </div>
+  </div>
+</aside>

@@ -1,0 +1,46 @@
+<header class="topbar">
+
+  <!-- SEARCH -->
+  <div class="topbar-search">
+    <input type="text" class="topbar-search-input" placeholder="Search..." />
+    <span class="topbar-search-icon">🔍</span>
+  </div>
+
+  <!-- SPACER -->
+  <div style="flex: 1"></div>
+
+  <!-- DATE RANGE -->
+  <div class="topbar-daterange">
+    📅 {{ today }}
+  </div>
+
+  <!-- NOTIFICATION -->
+  <div class="notification-container" (click)="toggleNotification()">
+    <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--bg-muted); display: flex; align-items: center; justify-content: center; position: relative;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-secondary);">
+        <path d="M18 8a6 6 0 0 0 -12 0c0 7 -3 9 -3 9h18s-3 -2 -3 -9" />
+        <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
+      </svg>
+      <!-- Badge -->
+      <span style="position: absolute; top: 0; right: 0; width: 8px; height: 8px; background: var(--expense-500, #dc2626); border-radius: 50%; border: 2px solid var(--bg-surface, #ffffff);"></span>
+    </div>
+
+    <!-- NOTIFICATION DROPDOWN -->
+    <div class="avatar-dropdown" *ngIf="isNotificationOpen" (click)="$event.stopPropagation()" style="min-width: 250px;">
+      <div class="dropdown-item">There is a new notification</div>
+      <div class="dropdown-item" style="color: var(--text-muted); font-size: 11px;">You met your weekly workout target!</div>
+    </div>
+  </div>
+
+  <!-- USER AVATAR -->
+  <div class="avatar-container" (click)="toggleDropdown()">
+    <div class="sidebar-avatar">{{ authService.currentUser()?.username?.charAt(0)?.toUpperCase() || 'U' }}</div>
+    
+    <!-- DROPDOWN MENU -->
+    <div class="avatar-dropdown" *ngIf="isDropdownOpen" (click)="$event.stopPropagation()">
+      <div class="dropdown-item" (click)="goToSettings()">Setting</div>
+      <div class="dropdown-item dropdown-item-danger" (click)="signOut()">Sign Out</div>
+    </div>
+  </div>
+
+</header>

@@ -1,0 +1,231 @@
+<div class="settings-page">
+  <div class="page-header">
+    <h1 class="page-title">Settings</h1>
+    <p class="page-subtitle">Kelola profil, keamanan, dan akun pengguna</p>
+  </div>
+
+  <nz-tabset nzType="line" nzSize="default">
+
+    <!-- ── TAB 1: PROFIL ─────────────────────── -->
+    <nz-tab nzTitle="👤 Profil">
+      <div class="settings-section">
+        <nz-card class="settings-card">
+          <h3 class="settings-card-title">Informasi Profil</h3>
+          <p class="settings-card-desc">Perbarui username dan email akun kamu</p>
+          <nz-divider/>
+
+          <form nz-form [formGroup]="profileForm" (ngSubmit)="saveProfile()" nzLayout="vertical"
+                style="max-width: 480px">
+
+            <nz-form-item>
+              <nz-form-label nzRequired>Username</nz-form-label>
+              <nz-form-control nzErrorTip="Username minimal 3 karakter">
+                <nz-input-group nzPrefixIcon="user">
+                  <input nz-input formControlName="username" placeholder="Username" class="rounded-lg"/>
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+              <nz-form-label nzRequired>Email</nz-form-label>
+              <nz-form-control nzErrorTip="Email tidak valid">
+                <nz-input-group nzPrefixIcon="mail">
+                  <input nz-input formControlName="email" type="email" placeholder="Email" class="rounded-lg"/>
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+
+            <button nz-button nzType="primary" [nzLoading]="loadingProfile()" class="settings-btn">
+              Simpan Perubahan
+            </button>
+          </form>
+        </nz-card>
+      </div>
+    </nz-tab>
+
+    <!-- ── TAB 2: KEAMANAN ───────────────────── -->
+    <nz-tab nzTitle="🔒 Keamanan">
+      <div class="settings-section">
+
+        <!-- Change Password -->
+        <nz-card class="settings-card">
+          <h3 class="settings-card-title">Ubah Password</h3>
+          <p class="settings-card-desc">Pastikan password kamu kuat dan unik</p>
+          <nz-divider/>
+
+          <form nz-form [formGroup]="passwordForm" (ngSubmit)="changePassword()" nzLayout="vertical"
+                style="max-width: 480px">
+
+            <nz-form-item>
+              <nz-form-label nzRequired>Password Saat Ini</nz-form-label>
+              <nz-form-control nzErrorTip="Wajib diisi">
+                <nz-input-group nzPrefixIcon="lock">
+                  <input nz-input formControlName="currentPassword" type="password" placeholder="Password lama"/>
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+              <nz-form-label nzRequired>Password Baru</nz-form-label>
+              <nz-form-control nzErrorTip="Minimal 8 karakter">
+                <nz-input-group nzPrefixIcon="lock">
+                  <input nz-input formControlName="newPassword" type="password" placeholder="Password baru (min. 8 karakter)"/>
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+              <nz-form-label nzRequired>Konfirmasi Password Baru</nz-form-label>
+              <nz-form-control [nzErrorTip]="confirmPasswordError">
+                <nz-input-group nzPrefixIcon="lock">
+                  <input nz-input formControlName="confirmPassword" type="password" placeholder="Ulangi password baru"/>
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+
+            <button nz-button nzType="primary" [nzLoading]="loadingPassword()" class="settings-btn">
+              Ubah Password
+            </button>
+          </form>
+        </nz-card>
+
+        <!-- Active Sessions -->
+        <nz-card class="settings-card" style="margin-top: 16px">
+          <div style="display:flex; justify-content:space-between; align-items:center">
+            <div>
+              <h3 class="settings-card-title">Sesi Aktif</h3>
+              <p class="settings-card-desc">Perangkat yang sedang login ke akun kamu</p>
+            </div>
+            <button nz-button nz-popconfirm
+              nzPopconfirmTitle="Logout dari semua perangkat?"
+              nzType="default" nzDanger
+              (nzOnConfirm)="revokeAllSessions()"
+              style="font-size:12px">
+              Logout Semua
+            </button>
+          </div>
+          <nz-divider/>
+
+          @for (session of sessions(); track session.id) {
+            <div class="session-item">
+              <div class="session-info">
+                <span nz-icon nzType="laptop" style="color: var(--text-muted); margin-right:8px"></span>
+                <div>
+                  <div class="session-device">{{ session.deviceInfo || 'Browser' }}</div>
+                  <div class="session-meta">{{ session.ipAddress }} · Dibuat {{ session.createdAt | date:'dd MMM yyyy, HH:mm' }}</div>
+                </div>
+              </div>
+              <button nz-button nzSize="small" nzDanger
+                nz-popconfirm nzPopconfirmTitle="Akhiri sesi ini?"
+                (nzOnConfirm)="revokeSession(session.id)">
+                Akhiri
+              </button>
+            </div>
+          }
+
+          @if (sessions().length === 0) {
+            <p style="color: var(--text-muted); font-size: 13px; text-align:center; padding: 16px 0">
+              Tidak ada data sesi
+            </p>
+          }
+        </nz-card>
+      </div>
+    </nz-tab>
+
+    <!-- ── TAB 3: KELOLA PENGGUNA ────────────── -->
+    <nz-tab nzTitle="👥 Pengguna">
+      <div class="settings-section">
+        <nz-card class="settings-card">
+          <h3 class="settings-card-title">Daftarkan Pengguna Baru</h3>
+          <p class="settings-card-desc">
+            Buat akun baru untuk pengguna lain yang menggunakan aplikasi FiTrack di perangkat yang sama
+          </p>
+          <nz-divider/>
+
+          <form nz-form [formGroup]="registerForm" (ngSubmit)="registerNewUser()" nzLayout="vertical"
+                style="max-width: 480px">
+
+            <nz-form-item>
+              <nz-form-label nzRequired>Username</nz-form-label>
+              <nz-form-control nzErrorTip="Username minimal 3 karakter, hanya huruf/angka/underscore">
+                <nz-input-group nzPrefixIcon="user">
+                  <input nz-input formControlName="username" placeholder="contoh: user_baru"/>
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+              <nz-form-label nzRequired>Email</nz-form-label>
+              <nz-form-control nzErrorTip="Email tidak valid">
+                <nz-input-group nzPrefixIcon="mail">
+                  <input nz-input formControlName="email" type="email" placeholder="email@contoh.com"/>
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+              <nz-form-label nzRequired>Password</nz-form-label>
+              <nz-form-control nzErrorTip="Minimal 8 karakter">
+                <nz-input-group nzPrefixIcon="lock">
+                  <input nz-input formControlName="password" type="password" placeholder="Minimal 8 karakter"/>
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+              <nz-form-label nzRequired>Konfirmasi Password</nz-form-label>
+              <nz-form-control [nzErrorTip]="registerConfirmError">
+                <nz-input-group nzPrefixIcon="lock">
+                  <input nz-input formControlName="confirmPassword" type="password" placeholder="Ulangi password"/>
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+
+            <button nz-button nzType="primary" [nzLoading]="loadingRegister()" class="settings-btn">
+              Buat Akun Baru
+            </button>
+          </form>
+        </nz-card>
+      </div>
+    </nz-tab>
+
+    <!-- ── TAB 4: AKUN ───────────────────────── -->
+    <nz-tab nzTitle="⚙️ Akun">
+      <div class="settings-section">
+        <nz-card class="settings-card">
+          <h3 class="settings-card-title">Info Akun</h3>
+          <nz-divider/>
+
+          <div class="account-info-row">
+            <span class="account-info-label">Username</span>
+            <span class="account-info-value">{{ auth.currentUser()?.username }}</span>
+          </div>
+          <div class="account-info-row">
+            <span class="account-info-label">Email</span>
+            <span class="account-info-value">{{ auth.currentUser()?.email }}</span>
+          </div>
+          <div class="account-info-row">
+            <span class="account-info-label">Strava</span>
+            <span>
+              @if (auth.currentUser()?.stravaConnected) {
+                <nz-tag nzColor="success">Terhubung</nz-tag>
+              } @else {
+                <nz-tag>Belum terhubung</nz-tag>
+              }
+            </span>
+          </div>
+
+          <nz-divider/>
+
+          <button nz-button nzDanger nzType="default"
+            nz-popconfirm nzPopconfirmTitle="Yakin ingin logout?"
+            (nzOnConfirm)="logout()">
+            <span nz-icon nzType="logout"></span>
+            Logout
+          </button>
+        </nz-card>
+      </div>
+    </nz-tab>
+
+  </nz-tabset>
+</div>

@@ -1,0 +1,114 @@
+<div class="auth-shell">
+
+  <!-- LEFT PANEL — Brand -->
+  <div class="auth-brand">
+    <div class="auth-brand-inner">
+      <div class="auth-logo">
+        <img src="assets/favicon.svg" alt="FiTrack" width="48" height="48">
+        <span class="auth-logo-text">FiTrack</span>
+      </div>
+      <h1 class="auth-tagline">
+        Kelola keuangan &amp;<br>latihan dalam satu tempat.
+      </h1>
+      <p class="auth-sub">
+        Personal finance manager + workout tracker yang tersambung langsung ke Strava — berjalan penuh di lokal, data 100% milik kamu.
+      </p>
+
+      <!-- Feature pills -->
+      <div class="auth-features">
+        <span class="auth-feature-pill">💰 Manajemen Keuangan</span>
+        <span class="auth-feature-pill">🏃 Workout Tracker</span>
+        <span class="auth-feature-pill">⚡ Strava Sync</span>
+        <span class="auth-feature-pill">🔒 Data Lokal</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL — Form -->
+  <div class="auth-form-panel">
+    <div class="auth-form-card">
+
+      <!-- Header -->
+      <div class="auth-form-header">
+        <h2 class="auth-form-title">Selamat datang kembali</h2>
+        <p class="auth-form-subtitle">Masuk ke akun FiTrack kamu</p>
+      </div>
+
+      <!-- Error Alert -->
+      @if (errorMsg()) {
+        <nz-alert
+          nzType="error"
+          [nzMessage]="errorMsg()!"
+          nzShowIcon
+          class="auth-alert"
+        />
+      }
+
+      <!-- Form -->
+      <form nz-form [formGroup]="form" (ngSubmit)="submit()" nzLayout="vertical">
+
+        <!-- Username -->
+        <nz-form-item>
+          <nz-form-label nzRequired>Username</nz-form-label>
+          <nz-form-control nzErrorTip="Username minimal 3 karakter">
+            <nz-input-group nzPrefixIcon="user">
+              <input
+                nz-input
+                formControlName="username"
+                placeholder="Masukkan username"
+                autocomplete="username"
+              />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+
+        <!-- Password -->
+        <nz-form-item>
+          <nz-form-label nzRequired>Password</nz-form-label>
+          <nz-form-control nzErrorTip="Password minimal 6 karakter">
+            <nz-input-group
+              nzPrefixIcon="lock"
+              [nzSuffix]="suffixTemplate"
+            >
+              <input
+                nz-input
+                formControlName="password"
+                [type]="showPassword() ? 'text' : 'password'"
+                placeholder="Masukkan password"
+                autocomplete="current-password"
+              />
+            </nz-input-group>
+            <ng-template #suffixTemplate>
+              <span
+                nz-icon
+                [nzType]="showPassword() ? 'eye-invisible' : 'eye'"
+                class="auth-eye-icon"
+                (click)="togglePassword()"
+              ></span>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+
+        <!-- Submit -->
+        <button
+          nz-button
+          nzType="primary"
+          nzBlock
+          [nzLoading]="loading()"
+          class="auth-submit-btn"
+        >
+          {{ loading() ? 'Sedang masuk...' : 'Masuk' }}
+        </button>
+
+      </form>
+
+      <!-- Footer -->
+      <p class="auth-footer-text">
+        Belum punya akun?
+        <a routerLink="/auth/register" class="auth-link">Daftar sekarang</a>
+      </p>
+
+    </div>
+  </div>
+
+</div>

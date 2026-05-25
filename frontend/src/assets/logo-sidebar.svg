@@ -1,0 +1,38 @@
+<svg width="120" height="36" viewBox="0 0 120 36" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="markGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3d9e7a"/>
+      <stop offset="100%" stop-color="#1a5c40"/>
+    </linearGradient>
+    <linearGradient id="leafGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6fcf97"/>
+      <stop offset="100%" stop-color="#27ae60"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Logo mark: rounded square bg -->
+  <rect x="0" y="2" width="32" height="32" rx="8" fill="url(#markGrad)"/>
+
+  <!-- Leaf / sprout shape — represents growth (finance + fitness) -->
+  <!-- Main leaf curve -->
+  <path d="M16 26 C16 26 8 20 9 12 C9 12 14 10 19 14 C22 16 22 20 16 26Z"
+        fill="url(#leafGrad)" opacity="0.95"/>
+  <!-- Second leaf -->
+  <path d="M16 26 C16 26 22 18 22 12 C22 12 26 13 25 18 C24 22 20 25 16 26Z"
+        fill="white" opacity="0.25"/>
+  <!-- Stem -->
+  <line x1="16" y1="26" x2="16" y2="29"
+        stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+  <!-- Heartbeat / activity line — represents fitness tracking -->
+  <polyline points="6,19 9,19 11,14 13,23 15,17 17,19 26,19"
+            fill="none" stroke="white" stroke-width="1.4"
+            stroke-linecap="round" stroke-linejoin="round" opacity="0.6"/>
+
+  <!-- Wordmark -->
+  <text x="40" y="24"
+        font-family="'Poppins', 'DM Sans', sans-serif"
+        font-size="16"
+        font-weight="600"
+        fill="white"
+        letter-spacing="-0.3">FiTrack</text>
+</svg>
