@@ -19,6 +19,7 @@ export const routes: Routes = [
       { path: 'dashboard',    loadComponent: () => import('./features/dashboard/dashboard.component').then(m => m.DashboardComponent) },
       { path: 'accounts',     loadComponent: () => import('./features/accounts/accounts.component').then(m => m.AccountsComponent) },
       { path: 'transactions', loadComponent: () => import('./features/finance/transactions/transactions.component').then(m => m.TransactionsComponent) },
+      { path: 'categories',     loadComponent: () => import('./features/finance/categories/categories.component').then(m => m.CategoriesComponent) },
       { path: 'budgets',      loadComponent: () => import('./features/finance/budgets/budgets.component').then(m => m.BudgetsComponent) },
       { path: 'saving-goals', loadComponent: () => import('./features/finance/saving-goals/saving-goals.component').then(m => m.SavingGoalsComponent) },
       { path: 'activities',   loadComponent: () => import('./features/workout/activities/activities.component').then(m => m.ActivitiesComponent) },

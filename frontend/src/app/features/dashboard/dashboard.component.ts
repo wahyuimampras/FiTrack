@@ -1,8 +1,8 @@
 // src/app/features/dashboard/dashboard.component.ts
 import { Component, OnInit, inject, signal, computed } from '@angular/core';
-import { CommonModule, CurrencyPipe, DecimalPipe } from '@angular/common';
+import { CommonModule, DecimalPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { forkJoin } from 'rxjs';
+import { catchError, of, forkJoin } from 'rxjs';
 
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzGridModule } from 'ng-zorro-antd/grid';
@@ -14,6 +14,7 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 import { DashboardService } from './dashboard.service';
 import { AuthService } from '../../core/services/auth.service';
@@ -28,7 +29,6 @@ import {
   imports: [
     CommonModule,
     RouterLink,
-    CurrencyPipe,
     DecimalPipe,
     NzCardModule,
     NzGridModule,
@@ -45,6 +45,7 @@ import {
 })
 export class DashboardComponent implements OnInit {
   private dashSvc = inject(DashboardService);
+  private msg = inject(NzMessageService);
   readonly auth = inject(AuthService);
 
   // State
@@ -59,17 +60,18 @@ export class DashboardComponent implements OnInit {
   now = new Date();
   month = this.now.getMonth() + 1;
   year = this.now.getFullYear();
-
   monthLabel = this.now.toLocaleDateString('id-ID', { month: 'long', year: 'numeric' });
 
-  // Computed values
+  // Computed
   netBalance = computed(() => {
     const s = this.summary();
     return s ? s.totalIncome - s.totalExpense : 0;
   });
 
+  // Hitung dari semua akun aktif (tidak filter isActive karena
+  // backend sudah return semua milik user)
   totalAccountBalance = computed(() =>
-    this.accounts().reduce((sum, a) => sum + a.balance, 0)
+    this.accounts().reduce((sum, a) => sum + (a.balance ?? 0), 0)
   );
 
   savingsRate = computed(() => {
@@ -78,18 +80,19 @@ export class DashboardComponent implements OnInit {
     return Math.round(((s.totalIncome - s.totalExpense) / s.totalIncome) * 100);
   });
 
-  topExpenseCategories = computed(() =>
-    this.summary()?.expenseByCategory
-      .sort((a, b) => b.amount - a.amount)
-      .slice(0, 5) ?? []
-  );
+  topExpenseCategories = computed(() => {
+    const cats = this.summary()?.expenseByCategory ?? [];
+    return [...cats].sort((a, b) => b.amount - a.amount).slice(0, 5);
+  });
 
   activeSavingGoals = computed(() =>
     this.savingGoals().filter(g => !g.isCompleted).slice(0, 3)
   );
 
-  activeBudgets = computed(() =>
-    this.budgets().slice(0, 4)
+  activeBudgets = computed(() => this.budgets().slice(0, 4));
+
+  activeAccounts = computed(() =>
+    this.accounts().filter(a => a.isActive !== false)
   );
 
   ngOnInit(): void {
@@ -99,26 +102,41 @@ export class DashboardComponent implements OnInit {
   loadAll(): void {
     this.loading.set(true);
 
+    // Gunakan catchError per request agar satu gagal tidak blok semua
+    const emptyDashboard: DashboardSummary = {
+      totalIncome: 0, totalExpense: 0,
+      totalActivities: 0, totalDistanceKm: 0, totalCaloriesBurned: 0,
+      expenseByCategory: [], activityByType: []
+    };
+
     forkJoin({
-      summary: this.dashSvc.getSummary(this.month, this.year),
-      transactions: this.dashSvc.getRecentTransactions(1, 6),
-      accounts: this.dashSvc.getAccounts(),
-      budgets: this.dashSvc.getBudgets(this.month, this.year),
-      goals: this.dashSvc.getSavingGoals(),
+      summary:      this.dashSvc.getSummary(this.month, this.year).pipe(catchError(() => of(emptyDashboard))),
+      transactions: this.dashSvc.getRecentTransactions(1, 6).pipe(catchError(() => of([]))),
+      accounts:     this.dashSvc.getAccounts().pipe(catchError(() => of([]))),
+      budgets:      this.dashSvc.getBudgets(this.month, this.year).pipe(catchError(() => of([]))),
+      goals:        this.dashSvc.getSavingGoals().pipe(catchError(() => of([]))),
     }).subscribe({
       next: (data) => {
         this.summary.set(data.summary);
-        // Handle paged result or plain array
+
+        // Handle paged result atau plain array
         const txList = Array.isArray(data.transactions)
           ? data.transactions
-          : data.transactions?.items ?? [];
+          : (data.transactions as any)?.items ?? [];
         this.transactions.set(txList);
-        this.accounts.set(data.accounts.filter(a => a.isActive));
-        this.budgets.set(data.budgets);
-        this.savingGoals.set(data.goals);
+
+        // Simpan semua accounts (aktif & tidak aktif)
+        const accs = Array.isArray(data.accounts) ? data.accounts : [];
+        this.accounts.set(accs);
+
+        this.budgets.set(Array.isArray(data.budgets) ? data.budgets : []);
+        this.savingGoals.set(Array.isArray(data.goals) ? data.goals : []);
         this.loading.set(false);
       },
-      error: () => this.loading.set(false)
+      error: () => {
+        this.msg.error('Gagal memuat dashboard');
+        this.loading.set(false);
+      }
     });
   }
 
@@ -126,20 +144,13 @@ export class DashboardComponent implements OnInit {
     this.loadAll();
   }
 
-  // Helpers
+  // ── Helpers ───────────────────────────────────────
   formatRupiah(amount: number): string {
+    if (amount === null || amount === undefined) return 'Rp 0';
     return new Intl.NumberFormat('id-ID', {
-      style: 'currency',
-      currency: 'IDR',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0
+      style: 'currency', currency: 'IDR',
+      minimumFractionDigits: 0, maximumFractionDigits: 0
     }).format(amount);
-  }
-
-  formatPace(pace: number): string {
-    const min = Math.floor(pace);
-    const sec = Math.round((pace - min) * 60);
-    return `${min}:${sec.toString().padStart(2, '0')}/km`;
   }
 
   getBudgetPercent(budget: BudgetDto): number {

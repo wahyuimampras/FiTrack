@@ -13,7 +13,7 @@
 
   <!-- ── SKELETON LOADING ─────────────────────────── -->
   @if (loading()) {
-    <div class="dash-grid">
+    <div class="stat-grid">
       @for (i of [1,2,3,4]; track i) {
         <nz-skeleton [nzActive]="true" [nzParagraph]="{ rows: 2 }"
           style="background:white; border-radius:16px; padding:20px"/>
@@ -25,7 +25,7 @@
 
   @if (!loading()) {
 
-    <!-- ── HERO CARD (Total Saldo) ──────────────────── -->
+    <!-- ── HERO CARD ──────────────────────────────── -->
     <div class="hero-card">
       <div class="hero-card-left">
         <p class="hero-label">Total Saldo Rekening</p>
@@ -59,10 +59,9 @@
       </div>
     </div>
 
-    <!-- ── STAT CARDS (4 kolom) ──────────────────────── -->
+    <!-- ── STAT CARDS ────────────────────────────── -->
     <div class="stat-grid">
 
-      <!-- Income -->
       <div class="stat-card">
         <div class="stat-card-header">
           <div class="stat-icon stat-icon-income">↑</div>
@@ -74,7 +73,6 @@
         <p class="stat-desc">Total pemasukan {{ monthLabel }}</p>
       </div>
 
-      <!-- Expense -->
       <div class="stat-card">
         <div class="stat-card-header">
           <div class="stat-icon stat-icon-expense">↓</div>
@@ -86,7 +84,6 @@
         <p class="stat-desc">Total pengeluaran {{ monthLabel }}</p>
       </div>
 
-      <!-- Workout -->
       <div class="stat-card">
         <div class="stat-card-header">
           <div class="stat-icon stat-icon-workout">🏃</div>
@@ -99,7 +96,6 @@
         <p class="stat-desc">{{ (summary()?.totalDistanceKm ?? 0) | number:'1.1-1' }} km · {{ summary()?.totalCaloriesBurned ?? 0 | number }} kal</p>
       </div>
 
-      <!-- Net -->
       <div class="stat-card">
         <div class="stat-card-header">
           <div class="stat-icon" [class]="netBalance() >= 0 ? 'stat-icon-income' : 'stat-icon-expense'">
@@ -115,24 +111,24 @@
 
     </div>
 
-    <!-- ── MIDDLE ROW ────────────────────────────────── -->
+    <!-- ── MIDDLE ROW ─────────────────────────────── -->
     <div class="mid-grid">
 
-      <!-- Rekening -->
+      <!-- Rekening — gunakan activeAccounts() -->
       <div class="dash-card">
         <div class="card-header">
           <h3 class="card-title">💳 Rekening</h3>
           <a routerLink="/accounts" class="card-link">Lihat semua ↗</a>
         </div>
 
-        @if (accounts().length === 0) {
+        @if (activeAccounts().length === 0) {
           <div class="empty-state">
             <p>Belum ada rekening</p>
             <a routerLink="/accounts" class="btn btn-primary btn-sm">+ Tambah Rekening</a>
           </div>
         }
 
-        @for (account of accounts(); track account.id) {
+        @for (account of activeAccounts(); track account.id) {
           <div class="account-row">
             <div class="account-row-left">
               <div class="account-icon">{{ getAccountIcon(account.type) }}</div>
@@ -146,7 +142,7 @@
         }
       </div>
 
-      <!-- Expense by Category (donut-like bar) -->
+      <!-- Expense by Category -->
       <div class="dash-card">
         <div class="card-header">
           <h3 class="card-title">📊 Pengeluaran per Kategori</h3>
@@ -217,7 +213,7 @@
 
     </div>
 
-    <!-- ── BOTTOM ROW ────────────────────────────────── -->
+    <!-- ── BOTTOM ROW ─────────────────────────────── -->
     <div class="bottom-grid">
 
       <!-- Transaksi Terbaru -->
@@ -276,7 +272,6 @@
       <!-- Budget & Saving Goals -->
       <div class="dash-card-stack">
 
-        <!-- Budgets -->
         <div class="dash-card">
           <div class="card-header">
             <h3 class="card-title">📋 Budget Bulan Ini</h3>
@@ -310,7 +305,6 @@
           }
         </div>
 
-        <!-- Saving Goals -->
         <div class="dash-card" style="margin-top: 16px">
           <div class="card-header">
             <h3 class="card-title">🎯 Target Tabungan</h3>

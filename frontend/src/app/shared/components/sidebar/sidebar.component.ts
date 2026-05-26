@@ -38,6 +38,7 @@ export class SidebarComponent {
     {
       label: 'FINANCE',
       items: [
+        { label: 'Categories',        icon: '🗂️', route: '/categories' },
         { label: 'Budgets',        icon: '📋', route: '/budgets' },
         { label: 'Saving Goals',   icon: '🎯', route: '/saving-goals' },
       ]

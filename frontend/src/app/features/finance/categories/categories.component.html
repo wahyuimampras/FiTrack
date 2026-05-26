@@ -1,0 +1,268 @@
+<div class="categories-page">
+
+  <!-- ── HEADER ──────────────────────────────────── -->
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Kategori</h1>
+      <p class="page-subtitle">Kelola kategori pemasukan dan pengeluaran</p>
+    </div>
+    <button class="btn btn-primary btn-md" (click)="openAdd()">+ Tambah Kategori</button>
+  </div>
+
+  <!-- ── SKELETON ─────────────────────────────────── -->
+  @if (loading()) {
+    <div class="cat-skeleton-grid">
+      @for (i of [1,2,3,4,5,6]; track i) {
+        <nz-skeleton [nzActive]="true" [nzParagraph]="{ rows: 1 }"
+          style="background:white; border-radius:12px; padding:16px"/>
+      }
+    </div>
+  }
+
+  @if (!loading()) {
+
+    <!-- ── TABS ──────────────────────────────────── -->
+    <div class="cat-tabs">
+      <button class="cat-tab-btn"
+        [class.cat-tab-active]="activeTab() === 'Expense'"
+        (click)="setTab('Expense')">
+        💸 Pengeluaran
+        <span class="cat-tab-count">{{ expenseCategories().length }}</span>
+      </button>
+      <button class="cat-tab-btn"
+        [class.cat-tab-active]="activeTab() === 'Income'"
+        (click)="setTab('Income')">
+        💰 Pemasukan
+        <span class="cat-tab-count">{{ incomeCategories().length }}</span>
+      </button>
+    </div>
+
+    <!-- ── EXPENSE TAB ────────────────────────────── -->
+    @if (activeTab() === 'Expense') {
+      <div class="cat-section">
+        <div class="cat-section-header">
+          <p class="cat-section-desc">
+            {{ expenseCategories().length }} kategori pengeluaran
+          </p>
+          <button class="btn btn-secondary btn-sm" (click)="openAdd('Expense')">
+            + Tambah
+          </button>
+        </div>
+
+        @if (expenseCategories().length === 0) {
+          <div class="cat-empty">
+            <div class="cat-empty-icon">📂</div>
+            <p class="cat-empty-title">Belum ada kategori pengeluaran</p>
+            <p class="cat-empty-desc">Tambahkan kategori untuk mengorganisir pengeluaran kamu</p>
+            <button class="btn btn-primary btn-md" (click)="openAdd('Expense')">
+              + Tambah Kategori Pengeluaran
+            </button>
+          </div>
+        }
+
+        <div class="cat-grid">
+          @for (cat of expenseCategories(); track cat.id) {
+            <div class="cat-card">
+              <div class="cat-card-left">
+                <div class="cat-icon"
+                  [style.background]="(cat.color ?? '#dc2626') + '20'"
+                  [style.color]="cat.color ?? '#dc2626'">
+                  {{ cat.icon || '📁' }}
+                </div>
+                <div class="cat-info">
+                  <span class="cat-name">{{ cat.name }}</span>
+                  @if (cat.isDefault) {
+                    <span class="cat-default-badge">Default</span>
+                  }
+                </div>
+              </div>
+              <div class="cat-card-actions">
+                <button class="cat-action-btn"
+                  nz-tooltip nzTooltipTitle="Edit"
+                  (click)="openEdit(cat)">✏️</button>
+                @if (!cat.isDefault) {
+                  <button class="cat-action-btn cat-action-danger"
+                    nz-tooltip nzTooltipTitle="Hapus"
+                    nz-popconfirm
+                    nzPopconfirmTitle="Hapus kategori ini?"
+                    nzPopconfirmPlacement="left"
+                    (nzOnConfirm)="delete(cat.id)">🗑️</button>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    }
+
+    <!-- ── INCOME TAB ─────────────────────────────── -->
+    @if (activeTab() === 'Income') {
+      <div class="cat-section">
+        <div class="cat-section-header">
+          <p class="cat-section-desc">
+            {{ incomeCategories().length }} kategori pemasukan
+          </p>
+          <button class="btn btn-secondary btn-sm" (click)="openAdd('Income')">
+            + Tambah
+          </button>
+        </div>
+
+        @if (incomeCategories().length === 0) {
+          <div class="cat-empty">
+            <div class="cat-empty-icon">💰</div>
+            <p class="cat-empty-title">Belum ada kategori pemasukan</p>
+            <p class="cat-empty-desc">Tambahkan kategori untuk mengorganisir pemasukan kamu</p>
+            <button class="btn btn-primary btn-md" (click)="openAdd('Income')">
+              + Tambah Kategori Pemasukan
+            </button>
+          </div>
+        }
+
+        <div class="cat-grid">
+          @for (cat of incomeCategories(); track cat.id) {
+            <div class="cat-card">
+              <div class="cat-card-left">
+                <div class="cat-icon"
+                  [style.background]="(cat.color ?? '#059669') + '20'"
+                  [style.color]="cat.color ?? '#059669'">
+                  {{ cat.icon || '📁' }}
+                </div>
+                <div class="cat-info">
+                  <span class="cat-name">{{ cat.name }}</span>
+                  @if (cat.isDefault) {
+                    <span class="cat-default-badge">Default</span>
+                  }
+                </div>
+              </div>
+              <div class="cat-card-actions">
+                <button class="cat-action-btn"
+                  nz-tooltip nzTooltipTitle="Edit"
+                  (click)="openEdit(cat)">✏️</button>
+                @if (!cat.isDefault) {
+                  <button class="cat-action-btn cat-action-danger"
+                    nz-tooltip nzTooltipTitle="Hapus"
+                    nz-popconfirm
+                    nzPopconfirmTitle="Hapus kategori ini?"
+                    nzPopconfirmPlacement="left"
+                    (nzOnConfirm)="delete(cat.id)">🗑️</button>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    }
+
+  } <!-- end !loading -->
+
+</div>
+
+<!-- ── MODAL ──────────────────────────────────────── -->
+<nz-modal
+  [nzVisible]="showModal()"
+  [nzTitle]="modalTitle()"
+  [nzFooter]="null"
+  nzWidth="480px"
+  (nzOnCancel)="closeModal()"
+>
+  <ng-container *nzModalContent>
+    <form nz-form [formGroup]="form" (ngSubmit)="submit()" nzLayout="vertical">
+
+      <!-- Nama -->
+      <nz-form-item>
+        <nz-form-label nzRequired>Nama Kategori</nz-form-label>
+        <nz-form-control nzErrorTip="Nama wajib diisi (min. 2 karakter)">
+          <input nz-input formControlName="name"
+            placeholder="contoh: Makan & Minum, Transport, Gaji..."/>
+        </nz-form-control>
+      </nz-form-item>
+
+      <!-- Tipe (hanya saat tambah baru) -->
+      @if (!isEditing()) {
+        <nz-form-item>
+          <nz-form-label nzRequired>Tipe</nz-form-label>
+          <nz-form-control>
+            <div class="type-toggle">
+              <button type="button" class="type-btn"
+                [class.type-btn-expense]="form.get('type')?.value === 'Expense'"
+                (click)="form.patchValue({ type: 'Expense' })">
+                💸 Pengeluaran
+              </button>
+              <button type="button" class="type-btn"
+                [class.type-btn-income]="form.get('type')?.value === 'Income'"
+                (click)="form.patchValue({ type: 'Income' })">
+                💰 Pemasukan
+              </button>
+            </div>
+          </nz-form-control>
+        </nz-form-item>
+      }
+
+      <!-- Icon Picker -->
+      <nz-form-item>
+        <nz-form-label>Icon</nz-form-label>
+        <nz-form-control>
+          <div class="icon-grid">
+            @for (icon of currentIcons(); track icon) {
+              <button type="button" class="icon-btn"
+                [class.icon-btn-active]="selectedIcon === icon"
+                (click)="selectIcon(icon)">
+                {{ icon }}
+              </button>
+            }
+          </div>
+          @if (selectedIcon) {
+            <p class="icon-selected">Dipilih: {{ selectedIcon }}
+              <button type="button" class="icon-clear" (click)="selectIcon('')">✕ hapus</button>
+            </p>
+          }
+        </nz-form-control>
+      </nz-form-item>
+
+      <!-- Warna -->
+      <nz-form-item>
+        <nz-form-label>Warna</nz-form-label>
+        <nz-form-control>
+          <div class="color-picker-row">
+            @for (color of colorPresets; track color) {
+              <div class="color-swatch"
+                [style.background]="color"
+                [class.color-swatch-active]="selectedColor === color"
+                (click)="selectColor(color)">
+              </div>
+            }
+            <input type="color" formControlName="color"
+              class="color-custom-input"
+              nz-tooltip nzTooltipTitle="Pilih warna custom"/>
+          </div>
+        </nz-form-control>
+      </nz-form-item>
+
+      <!-- Preview -->
+      @if (form.get('name')?.value) {
+        <div class="cat-preview">
+          <span class="cat-preview-label">Preview:</span>
+          <div class="cat-icon" style="width:36px; height:36px; border-radius:10px; font-size:18px; display:flex; align-items:center; justify-content:center;"
+            [style.background]="selectedColor + '20'"
+            [style.color]="selectedColor">
+            {{ selectedIcon || '📁' }}
+          </div>
+          <span class="cat-preview-name">{{ form.get('name')?.value }}</span>
+        </div>
+      }
+
+      <!-- Actions -->
+      <div class="modal-actions">
+        <button type="button" class="btn btn-secondary btn-md" (click)="closeModal()">
+          Batal
+        </button>
+        <button type="submit" class="btn btn-primary btn-md" [disabled]="submitting()">
+          @if (submitting()) { Menyimpan... }
+          @else if (isEditing()) { Simpan Perubahan }
+          @else { Tambah Kategori }
+        </button>
+      </div>
+
+    </form>
+  </ng-container>
+</nz-modal>
