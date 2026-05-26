@@ -1,0 +1,238 @@
+<div class="accounts-page">
+
+  <!-- ── HEADER ──────────────────────────────────── -->
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Rekening</h1>
+      <p class="page-subtitle">Kelola semua rekening keuangan kamu</p>
+    </div>
+    <div>
+      <button class="btn btn-primary btn-md" (click)="openAdd()">
+      + Tambah Rekening
+      </button>
+    </div>
+  </div>
+
+  <!-- ── SKELETON ─────────────────────────────────── -->
+  @if (loading()) {
+    <div class="acc-summary-grid">
+      @for (i of [1,2,3,4]; track i) {
+        <nz-skeleton [nzActive]="true" [nzParagraph]="{ rows: 2 }"
+          style="background:white; border-radius:16px; padding:20px"/>
+      }
+    </div>
+  }
+
+  @if (!loading()) {
+
+    <!-- ── SUMMARY CARDS ─────────────────────────── -->
+    <div class="acc-summary-grid">
+
+      <!-- Total Saldo -->
+      <div class="acc-total-card">
+        <p class="acc-total-label">Total Saldo Aktif</p>
+        <div class="acc-total-value">{{ formatRupiah(totalBalance()) }}</div>
+        <p class="acc-total-sub">{{ activeAccounts().length }} rekening aktif</p>
+      </div>
+
+      <!-- Per Type summary -->
+      @for (type of accountTypes; track type.value) {
+        <div class="acc-type-card">
+          <div class="acc-type-icon" [style.background]="type.color + '20'"
+               [style.color]="type.color">
+            {{ type.icon }}
+          </div>
+          <div class="acc-type-info">
+            <span class="acc-type-label">{{ type.label }}</span>
+            <span class="acc-type-total">
+              {{ formatRupiah(getTypeTotal(type.value)) }}
+            </span>
+            <span class="acc-type-count">
+              {{ getTypeCount(type.value) }} rekening
+            </span>
+          </div>
+        </div>
+      }
+
+    </div>
+
+    <!-- ── ACTIVE ACCOUNTS ───────────────────────── -->
+    @if (activeAccounts().length > 0) {
+      <h2 class="acc-section-title">Rekening Aktif</h2>
+      <div class="acc-cards-grid">
+        @for (account of activeAccounts(); track account.id) {
+          <div class="acc-card" [style.border-left-color]="account.color ?? '#285A48'">
+
+            <!-- Card Header -->
+            <div class="acc-card-header">
+              <div class="acc-card-icon"
+                [style.background]="(account.color ?? '#285A48') + '20'"
+                [style.color]="account.color ?? '#285A48'">
+                {{ getTypeConfig(account.type).icon }}
+              </div>
+              <div class="acc-card-actions">
+                <button class="acc-action-btn" nz-tooltip nzTooltipTitle="Edit"
+                  (click)="openEdit(account)">✏️</button>
+                <button class="acc-action-btn acc-action-danger"
+                  nz-tooltip nzTooltipTitle="Hapus"
+                  nz-popconfirm
+                  nzPopconfirmTitle="Yakin hapus rekening ini?"
+                  nzPopconfirmPlacement="bottomRight"
+                  (nzOnConfirm)="delete(account.id)">🗑️</button>
+              </div>
+            </div>
+
+            <!-- Card Body -->
+            <div class="acc-card-body">
+              <p class="acc-card-name">{{ account.name }}</p>
+              <div class="acc-card-balance">{{ formatRupiah(account.balance) }}</div>
+              <div class="acc-card-type">
+                <nz-tag [nzColor]="account.color ?? '#285A48'" style="font-size:11px">
+                  {{ getTypeConfig(account.type).label }}
+                </nz-tag>
+              </div>
+            </div>
+
+          </div>
+        }
+
+        <!-- Add new card -->
+        <div class="acc-card acc-card-add" (click)="openAdd()">
+          <div class="acc-add-icon">+</div>
+          <p class="acc-add-label">Tambah Rekening</p>
+        </div>
+      </div>
+    }
+
+    <!-- ── EMPTY STATE ───────────────────────────── -->
+    @if (activeAccounts().length === 0) {
+      <div class="acc-empty">
+        <div class="acc-empty-icon">💳</div>
+        <h3 class="acc-empty-title">Belum ada rekening</h3>
+        <p class="acc-empty-desc">Tambahkan rekening pertama kamu untuk mulai mencatat keuangan</p>
+        <button class="btn btn-primary btn-md" (click)="openAdd()">
+          + Tambah Rekening Pertama
+        </button>
+      </div>
+    }
+
+    <!-- ── INACTIVE ACCOUNTS ─────────────────────── -->
+    @if (inactiveAccounts().length > 0) {
+      <h2 class="acc-section-title" style="margin-top: 28px">Rekening Tidak Aktif</h2>
+      <div class="acc-inactive-list">
+        @for (account of inactiveAccounts(); track account.id) {
+          <div class="acc-inactive-row">
+            <div class="acc-inactive-left">
+              <div class="acc-inactive-icon">{{ getTypeConfig(account.type).icon }}</div>
+              <div>
+                <div class="acc-inactive-name">{{ account.name }}</div>
+                <div class="acc-inactive-type">{{ getTypeConfig(account.type).label }}</div>
+              </div>
+            </div>
+            <div class="acc-inactive-right">
+              <span class="acc-inactive-balance">{{ formatRupiah(account.balance) }}</span>
+              <button class="acc-action-btn" nz-tooltip nzTooltipTitle="Aktifkan kembali"
+                (click)="openEdit(account)">✏️</button>
+            </div>
+          </div>
+        }
+      </div>
+    }
+
+  } <!-- end !loading -->
+
+</div>
+
+<!-- ── MODAL TAMBAH / EDIT ──────────────────────── -->
+<nz-modal
+  [nzVisible]="showModal()"
+  [nzTitle]="modalTitle()"
+  [nzFooter]="null"
+  nzWidth="520px"
+  [nzBodyStyle]="{ padding: '24px' }"
+  (nzOnCancel)="closeModal()"
+>
+  <ng-container *nzModalContent>
+    <form nz-form [formGroup]="form" (ngSubmit)="submit()" nzLayout="vertical">
+
+      <!-- Nama -->
+      <nz-form-item>
+        <nz-form-label nzRequired>Nama Rekening</nz-form-label>
+        <nz-form-control nzErrorTip="Nama rekening wajib diisi (min. 2 karakter)">
+          <input nz-input formControlName="name"
+            placeholder="contoh: BCA Tabungan, GoPay, Dompet"/>
+        </nz-form-control>
+      </nz-form-item>
+
+      <!-- Tipe -->
+      <nz-form-item>
+        <nz-form-label nzRequired>Tipe Rekening</nz-form-label>
+        <nz-form-control nzErrorTip="Pilih tipe rekening">
+          <nz-select formControlName="type" nzPlaceHolder="Pilih tipe" style="width:100%">
+            @for (type of accountTypes; track type.value) {
+              <nz-option [nzValue]="type.value" [nzLabel]="type.icon + ' ' + type.label"/>
+            }
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+
+      <!-- Saldo -->
+      <nz-form-item>
+        <nz-form-label nzRequired>
+          {{ isEditing() ? 'Saldo Saat Ini' : 'Saldo Awal' }}
+        </nz-form-label>
+        <nz-form-control nzErrorTip="Saldo tidak boleh negatif">
+          <nz-input-number
+            formControlName="initialBalance"
+            [nzMin]="0"
+            [nzStep]="10000"
+            [nzFormatter]="formatRupiah"
+            style="width: 100%"
+          />
+        </nz-form-control>
+      </nz-form-item>
+
+      <!-- Warna -->
+      <nz-form-item>
+        <nz-form-label>Warna</nz-form-label>
+        <nz-form-control>
+          <div class="color-picker-row">
+            @for (color of colorPresets; track color) {
+              <div class="color-swatch"
+                [style.background]="color"
+                [class.color-swatch-active]="selectedColor === color"
+                (click)="selectColor(color)">
+              </div>
+            }
+            <input type="color" formControlName="color"
+              class="color-custom-input"
+              nz-tooltip nzTooltipTitle="Pilih warna custom"/>
+          </div>
+        </nz-form-control>
+      </nz-form-item>
+
+      <!-- Status Aktif (hanya saat edit) -->
+      @if (isEditing()) {
+        <nz-form-item>
+          <nz-form-label>Status</nz-form-label>
+          <nz-form-control>
+            <nz-switch formControlName="isActive"
+              nzCheckedChildren="Aktif"
+              nzUnCheckedChildren="Nonaktif"/>
+          </nz-form-control>
+        </nz-form-item>
+      }
+
+      <!-- Actions -->
+      <div class="modal-actions">
+        <button type="button" class="btn btn-secondary btn-md" (click)="closeModal()">
+          Batal
+        </button>
+        <button type="submit" class="btn btn-primary btn-md" [disabled]="submitting()">
+          {{ submitButtonText() }}
+        </button>
+      </div>
+
+    </form>
+  </ng-container>
+</nz-modal>

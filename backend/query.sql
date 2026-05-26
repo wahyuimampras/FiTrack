@@ -1,0 +1,1 @@
+SELECT "Id", "Name", "Type", "Balance", "IsActive" FROM "Accounts";

@@ -593,6 +593,9 @@ body {
  
 .page-header {
   margin-bottom: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
 }
  
 .page-title {
@@ -1260,6 +1263,398 @@ body {
   font-size: 11px;
   color: var(--text-primary);
   margin-top: 4px;
+}
+
+/* =============================================
+   ACCOUNTS PAGE STYLES
+   Tambahkan di bagian bawah styles.css
+   ============================================= */
+
+.accounts-page {
+  padding: 4px 0 24px;
+}
+
+/* ── SUMMARY GRID ─────────────────────────────── */
+.acc-summary-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+/* Total card */
+.acc-total-card {
+  background: linear-gradient(135deg, #285A48 0%, #1a3d31 100%);
+  border-radius: 16px;
+  padding: 22px 24px;
+  color: white;
+}
+
+.acc-total-label {
+  font-size: 11px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 0 8px;
+}
+
+.acc-total-value {
+  font-size: 26px;
+  font-weight: 700;
+  color: white;
+  letter-spacing: -0.02em;
+  margin-bottom: 6px;
+}
+
+.acc-total-sub {
+  font-size: 12px;
+  color: rgba(255,255,255,0.5);
+  margin: 0;
+}
+
+/* Type summary card */
+.acc-type-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 16px;
+  padding: 18px 20px;
+  box-shadow: var(--shadow-card);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.acc-type-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.acc-type-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.acc-type-label {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.acc-type-total {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.acc-type-count {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* ── SECTION TITLE ────────────────────────────── */
+.acc-section-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 14px;
+  letter-spacing: -0.005em;
+}
+
+/* ── ACCOUNT CARDS GRID ───────────────────────── */
+.acc-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+/* Account card */
+.acc-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-left: 4px solid #285A48;
+  border-radius: 16px;
+  padding: 18px 20px;
+  box-shadow: var(--shadow-card);
+  transition: transform 180ms ease, box-shadow 180ms ease;
+  cursor: default;
+}
+
+.acc-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md, 0 4px 12px rgba(15,34,25,0.10));
+}
+
+.acc-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.acc-card-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+
+.acc-card-actions {
+  display: flex;
+  gap: 4px;
+  opacity: 0;
+  transition: opacity 150ms;
+}
+.acc-card:hover .acc-card-actions { opacity: 1; }
+
+.acc-action-btn {
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: var(--bg-canvas);
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  transition: background 150ms;
+}
+.acc-action-btn:hover { background: var(--bg-muted); }
+.acc-action-danger:hover { background: #fee2e2; }
+
+.acc-card-body {}
+
+.acc-card-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 6px;
+}
+
+.acc-card-balance {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+  margin-bottom: 10px;
+}
+
+.acc-card-type {}
+
+/* Add card */
+.acc-card-add {
+  border-style: dashed;
+  border-left: 1px dashed var(--border-default);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  background: transparent;
+  min-height: 140px;
+  transition: background 150ms, border-color 150ms;
+}
+.acc-card-add:hover {
+  background: var(--bg-canvas);
+  border-color: #285A48;
+  transform: none;
+  box-shadow: none;
+}
+
+.acc-add-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--bg-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  color: var(--text-muted);
+  font-weight: 300;
+  transition: background 150ms, color 150ms;
+}
+.acc-card-add:hover .acc-add-icon {
+  background: #d9ede6;
+  color: #285A48;
+}
+
+.acc-add-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+  margin: 0;
+}
+.acc-card-add:hover .acc-add-label { color: #285A48; }
+
+/* ── EMPTY STATE ──────────────────────────────── */
+.acc-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 24px;
+  text-align: center;
+}
+
+.acc-empty-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.acc-empty-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 8px;
+}
+
+.acc-empty-desc {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin: 0 0 24px;
+  max-width: 360px;
+}
+
+/* ── INACTIVE LIST ────────────────────────────── */
+.acc-inactive-list {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+}
+
+.acc-inactive-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border-subtle);
+  opacity: 0.7;
+  transition: opacity 150ms;
+}
+.acc-inactive-row:last-child { border-bottom: none; }
+.acc-inactive-row:hover { opacity: 1; }
+
+.acc-inactive-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.acc-inactive-icon {
+  font-size: 22px;
+  width: 36px;
+  text-align: center;
+}
+
+.acc-inactive-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.acc-inactive-type {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.acc-inactive-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.acc-inactive-balance {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+/* ── MODAL FORM ───────────────────────────────── */
+.color-picker-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.color-swatch {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: transform 150ms, border-color 150ms;
+}
+
+.color-swatch:hover { transform: scale(1.15); }
+
+.color-swatch-active {
+  border-color: var(--text-primary);
+  transform: scale(1.1);
+  box-shadow: 0 0 0 2px white, 0 0 0 4px currentColor;
+}
+
+.color-custom-input {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  overflow: hidden;
+  outline: none;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 8px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+/* NzInputNumber full width override */
+.accounts-page nz-input-number,
+nz-modal nz-input-number {
+  width: 100% !important;
+}
+
+nz-modal .ant-input,
+nz-modal .ant-select-selector,
+nz-modal .ant-input-number {
+  border-radius: 8px !important;
+  border-color: var(--border-default) !important;
+}
+
+nz-modal .ant-input:focus,
+nz-modal .ant-input-number-focused,
+nz-modal .ant-select-focused .ant-select-selector {
+  border-color: #285A48 !important;
+  box-shadow: 0 0 0 2px rgba(40,90,72,0.15) !important;
 }
 
 /* ── RESPONSIVE ──────────────────────────────── */

@@ -9,7 +9,7 @@ public class AccountRepository(AppDbContext dbContext) : IAccountRepository
     public async Task<IEnumerable<Account>> GetByUserIdAsync(Guid userId, CancellationToken ct = default)
     {
         return await dbContext.Accounts
-            .Where(a => a.UserId == userId && a.IsActive)
+            .Where(a => a.UserId == userId)
             .OrderByDescending(a => a.CreatedAt)
             .ToListAsync(ct);
     }

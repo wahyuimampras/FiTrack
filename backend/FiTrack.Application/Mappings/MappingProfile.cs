@@ -10,7 +10,10 @@ public class MappingProfile : Profile
     public MappingProfile()
     {
         CreateMap<Transaction, TransactionDto>();
-        CreateMap<Account, AccountDto>();
+        CreateMap<Account, AccountDto>()
+            .ForMember(dest => dest.Type,
+                opt => opt.MapFrom(src => src.Type.ToString()));
+                
         CreateMap<Budget, BudgetDto>().ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.Name));
         CreateMap<RecurringBill, RecurringBillDto>().ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category != null ? src.Category.Name : null));
         CreateMap<SavingGoal, SavingGoalDto>();

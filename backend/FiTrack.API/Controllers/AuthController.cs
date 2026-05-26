@@ -13,8 +13,23 @@ namespace FiTrack.API.Controllers;
 
 [ApiController]
 [Route("api/auth")]
-public class AuthController(ISender mediator, ITokenService tokenService, ISessionService sessionService) : ControllerBase
+public class AuthController(
+    ISender mediator,
+    ITokenService tokenService,
+    ISessionService sessionService,
+    IWebHostEnvironment env) : ControllerBase
 {
+    // Helper: gunakan Secure=false di development (localhost HTTP)
+    private CookieOptions RefreshTokenCookieOptions() => new()
+    {
+        HttpOnly = true,
+        Secure = !env.IsDevelopment(),          // false saat dev, true saat production
+        SameSite = env.IsDevelopment()
+            ? SameSiteMode.Lax                  // Lax agar bisa dikirim cross-port di localhost
+            : SameSiteMode.Strict,
+        Expires = DateTime.UtcNow.AddDays(30)   // 30 hari
+    };
+
     [HttpPost("register")]
     [AllowAnonymous]
     public async Task<IActionResult> Register([FromBody] RegisterCommand command)
@@ -31,25 +46,18 @@ public class AuthController(ISender mediator, ITokenService tokenService, ISessi
         if (user == null) return Unauthorized(new { message = "Invalid credentials" });
 
         var refreshToken = tokenService.GenerateRefreshToken();
-
         var deviceInfo = Request.Headers.UserAgent.ToString();
         var ip = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
 
         var session = await sessionService.CreateSessionAsync(user.Id, refreshToken, deviceInfo, ip);
         var accessToken = tokenService.GenerateAccessToken(user, session.Id);
 
-        Response.Cookies.Append("refreshToken", refreshToken, new CookieOptions
-        {
-            HttpOnly = true,
-            Secure = true,
-            SameSite = SameSiteMode.Strict,
-            Expires = DateTime.UtcNow.AddDays(7)
-        });
+        Response.Cookies.Append("refreshToken", refreshToken, RefreshTokenCookieOptions());
 
         return Ok(new
         {
             accessToken,
-            expiresIn = 900,
+            expiresIn = 7200,  // 2 jam
             user = new { user.Id, user.Username, user.Email, StravaConnected = user.StravaAthleteId != null }
         });
     }
@@ -66,38 +74,28 @@ public class AuthController(ISender mediator, ITokenService tokenService, ISessi
         if (session == null)
             return Unauthorized(new { message = "Invalid or expired refresh token" });
 
-        // Rotate refresh token
         var newRefreshToken = tokenService.GenerateRefreshToken();
         var newAccessToken = tokenService.GenerateAccessToken(session.User, session.Id);
 
         await sessionService.RotateRefreshTokenAsync(session.Id, newRefreshToken);
 
-        Response.Cookies.Append("refreshToken", newRefreshToken, new CookieOptions
-        {
-            HttpOnly = true,
-            Secure = true,
-            SameSite = SameSiteMode.Strict,
-            Expires = DateTime.UtcNow.AddDays(7)
-        });
+        Response.Cookies.Append("refreshToken", newRefreshToken, RefreshTokenCookieOptions());
 
-        return Ok(new { accessToken = newAccessToken, expiresIn = 900 });
+        return Ok(new { accessToken = newAccessToken, expiresIn = 7200 });
     }
 
     [HttpPost("logout")]
     public async Task<IActionResult> Logout([FromBody] LogoutCommand command, CancellationToken cancellationToken)
     {
-        // Endpoint ini sengaja tidak diberi [Authorize] agar 
-        // meskipun AccessToken sudah expired, frontend tetap bisa logout 
-        // dengan mengirimkan RefreshToken yang masih hidup.
         await mediator.Send(command, cancellationToken);
-        return NoContent(); // 204 No Content
+        Response.Cookies.Delete("refreshToken");
+        return NoContent();
     }
 
     [Authorize]
     [HttpGet("sessions")]
     public async Task<IActionResult> GetSessions(CancellationToken cancellationToken)
     {
-        // Mengambil daftar device yang sedang login
         var result = await mediator.Send(new GetSessionsQuery(), cancellationToken);
         return Ok(result);
     }
@@ -106,7 +104,6 @@ public class AuthController(ISender mediator, ITokenService tokenService, ISessi
     [HttpDelete("sessions/{id}")]
     public async Task<IActionResult> RevokeSession(Guid id, CancellationToken cancellationToken)
     {
-        // Menendang device tertentu (berguna untuk tombol "Logout from this device" di UI Active Sessions)
         await mediator.Send(new RevokeSessionCommand(id), cancellationToken);
         return NoContent();
     }
@@ -115,7 +112,6 @@ public class AuthController(ISender mediator, ITokenService tokenService, ISessi
     [HttpDelete("sessions")]
     public async Task<IActionResult> RevokeAllSessions(CancellationToken cancellationToken)
     {
-        // Tombol Panic: "Logout from all devices"
         await mediator.Send(new RevokeAllSessionsCommand(), cancellationToken);
         return NoContent();
     }

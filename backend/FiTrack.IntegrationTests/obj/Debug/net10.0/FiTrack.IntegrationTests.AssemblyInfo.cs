@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("FiTrack.IntegrationTests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+71c89c2e9b95b8d5bb6ec148464ebf24752c1ac6")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+309900a14d4ef5cc617aa61399b3485a5a14916e")]
 [assembly: System.Reflection.AssemblyProductAttribute("FiTrack.IntegrationTests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("FiTrack.IntegrationTests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

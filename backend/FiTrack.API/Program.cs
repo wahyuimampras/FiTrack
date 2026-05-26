@@ -65,7 +65,11 @@ builder.Services.AddCors(opts =>
          .AllowAnyMethod()
          .AllowCredentials()));
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+    });
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddOpenApi(); // Built-in .NET 10 OpenAPI
 

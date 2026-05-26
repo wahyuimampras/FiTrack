@@ -39,7 +39,7 @@ public class AccountController(IMediator mediator) : ControllerBase
     public async Task<IActionResult> CreateAccount([FromBody] CreateAccountCommand command, CancellationToken cancellationToken)
     {
         var id = await mediator.Send(command, cancellationToken);
-        return CreatedAtAction(nameof(GetAccounts), new { id }, new { Id = id }); // Anda bisa mengganti nameof(GetAccounts) dengan nameof(GetById) nanti
+        return CreatedAtAction(nameof(GetById), new { id }, new { Id = id });
     }
 
     [HttpPut("{id}")]
