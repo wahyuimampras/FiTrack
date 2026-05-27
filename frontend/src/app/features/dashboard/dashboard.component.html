@@ -234,33 +234,31 @@
           <table class="tx-table">
             <thead>
               <tr>
-                <th>Deskripsi</th>
-                <th>Tipe</th>
-                <th>Tanggal</th>
+                <th style="text-align:left">Deskripsi</th>
+                <th style="text-align:left">Tipe</th>
+                <th style="text-align:left">Tanggal</th>
                 <th style="text-align:right">Jumlah</th>
               </tr>
             </thead>
             <tbody>
               @for (tx of transactions(); track tx.id) {
                 <tr class="tx-row">
-                  <td>
+                  <td style="text-align:left">
                     <div class="tx-desc">{{ tx.description }}</div>
                     @if (tx.notes) {
                       <div class="tx-notes">{{ tx.notes }}</div>
                     }
                   </td>
-                  <td>
+                  <td style="text-align:left">
                     <span class="tx-badge"
-                      [class]="tx.type === 'Income' ? 'tx-badge-income' :
-                               tx.type === 'Expense' ? 'tx-badge-expense' : 'tx-badge-transfer'">
+                      [ngClass]="{'tx-badge-income': tx.type.toLowerCase() === 'income', 'tx-badge-expense': tx.type.toLowerCase() === 'expense', 'tx-badge-transfer': tx.type.toLowerCase() === 'transfer'}">
                       {{ getTxTypeLabel(tx.type) }}
                     </span>
                   </td>
-                  <td class="tx-date">{{ formatDate(tx.date) }}</td>
-                  <td class="tx-amount"
-                    [class]="tx.type === 'Income' ? 'tx-amount-income' : 'tx-amount-expense'"
-                    style="text-align:right">
-                    {{ tx.type === 'Income' ? '+' : '-' }}{{ formatRupiah(tx.amount) }}
+                  <td style="text-align:left" class="tx-date">{{ formatDate(tx.date) }}</td>
+                  <td style="text-align:right" class="tx-amount"
+                    [ngClass]="{'tx-amount-income': tx.type.toLowerCase() === 'income', 'tx-amount-expense': tx.type.toLowerCase() === 'expense'}">
+                    {{ tx.type.toLowerCase() === 'income' ? '+' : '-' }}{{ formatRupiah(tx.amount) }}
                   </td>
                 </tr>
               }

@@ -25,14 +25,20 @@ public class TransactionRepository(AppDbContext dbContext) : ITransactionReposit
     }
 
     public async Task<(IEnumerable<Transaction> Items, int TotalCount)> GetPagedUserTransactionsAsync(
-        Guid userId, int page, int pageSize, CancellationToken ct = default)
+        Guid userId, int page, int pageSize, FiTrack.Domain.Enums.TransactionType? type = null, CancellationToken ct = default)
     {
         // 1. Buat base query (jangan dieksekusi dulu)
         var query = dbContext.Transactions
             .Include(t => t.Account)
             .Include(t => t.Category)
-            .Where(t => t.UserId == userId)
-            .OrderByDescending(t => t.Date) // Urutkan dari yang terbaru
+            .Where(t => t.UserId == userId);
+
+        if (type.HasValue)
+        {
+            query = query.Where(t => t.Type == type.Value);
+        }
+
+        query = query.OrderByDescending(t => t.Date) // Urutkan dari yang terbaru
             .ThenByDescending(t => t.CreatedAt);
 
         // 2. Hitung total semua data yang ada (sebelum dipotong)
@@ -45,6 +51,19 @@ public class TransactionRepository(AppDbContext dbContext) : ITransactionReposit
             .ToListAsync(ct);
 
         return (items, totalCount);
+    }
+
+    public async Task<(decimal TotalIncome, decimal TotalExpense)> GetTotalSummaryAsync(Guid userId, CancellationToken ct = default)
+    {
+        var income = await dbContext.Transactions
+            .Where(t => t.UserId == userId && t.Type == FiTrack.Domain.Enums.TransactionType.Income)
+            .SumAsync(t => t.Amount, ct);
+
+        var expense = await dbContext.Transactions
+            .Where(t => t.UserId == userId && t.Type == FiTrack.Domain.Enums.TransactionType.Expense)
+            .SumAsync(t => t.Amount, ct);
+
+        return (income, expense);
     }
 
     public async Task AddAsync(Transaction transaction, CancellationToken ct = default)

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\SKILL UPGRADE\\DOT NET ANGULAR\\FiTrack\\backend\\FiTrack.Application\\FiTrack.Application.csproj": {}
+    "D:\\SKILL UPGRADE\\DOT NET ANGULAR\\FiTrack\\backend\\Fitrack.application\\FiTrack.Application.csproj": {}
   },
   "projects": {
-    "D:\\SKILL UPGRADE\\DOT NET ANGULAR\\FiTrack\\backend\\FiTrack.Application\\FiTrack.Application.csproj": {
+    "D:\\SKILL UPGRADE\\DOT NET ANGULAR\\FiTrack\\backend\\Fitrack.application\\FiTrack.Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\SKILL UPGRADE\\DOT NET ANGULAR\\FiTrack\\backend\\FiTrack.Application\\FiTrack.Application.csproj",
+        "projectUniqueName": "D:\\SKILL UPGRADE\\DOT NET ANGULAR\\FiTrack\\backend\\Fitrack.application\\FiTrack.Application.csproj",
         "projectName": "FiTrack.Application",
-        "projectPath": "D:\\SKILL UPGRADE\\DOT NET ANGULAR\\FiTrack\\backend\\FiTrack.Application\\FiTrack.Application.csproj",
+        "projectPath": "D:\\SKILL UPGRADE\\DOT NET ANGULAR\\FiTrack\\backend\\Fitrack.application\\FiTrack.Application.csproj",
         "packagesPath": "C:\\Users\\wahyu\\.nuget\\packages\\",
-        "outputPath": "D:\\SKILL UPGRADE\\DOT NET ANGULAR\\FiTrack\\backend\\FiTrack.Application\\obj\\",
+        "outputPath": "D:\\SKILL UPGRADE\\DOT NET ANGULAR\\FiTrack\\backend\\Fitrack.application\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\wahyu\\AppData\\Roaming\\NuGet\\NuGet.Config"

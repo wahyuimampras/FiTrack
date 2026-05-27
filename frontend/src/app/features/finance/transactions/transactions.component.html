@@ -1,0 +1,233 @@
+<div class="tx-page">
+
+  <!-- ── HEADER ──────────────────────────────────────── -->
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Transaksi</h1>
+      <p class="page-subtitle">Catat dan kelola semua pemasukan & pengeluaran</p>
+    </div>
+    <button class="btn btn-primary btn-md" (click)="openAdd()">
+      + Tambah Transaksi
+    </button>
+  </div>
+
+  <!-- ── SUMMARY STRIP ───────────────────────────────── -->
+  <div class="tx-summary-strip">
+    <div class="tx-summary-item">
+      <span class="tx-summary-label">Pemasukan (All Time)</span>
+      <span class="tx-summary-value tx-sv-income">+{{ formatRupiah(pageSummary().income) }}</span>
+    </div>
+    <div class="tx-summary-divider"></div>
+    <div class="tx-summary-item">
+      <span class="tx-summary-label">Pengeluaran (All Time)</span>
+      <span class="tx-summary-value tx-sv-expense">-{{ formatRupiah(pageSummary().expense) }}</span>
+    </div>
+    <div class="tx-summary-divider"></div>
+    <div class="tx-summary-item">
+      <span class="tx-summary-label">Total Transaksi</span>
+      <span class="tx-summary-value">{{ totalCount() }} transaksi</span>
+    </div>
+  </div>
+
+  <!-- ── FILTER BAR ──────────────────────────────────── -->
+  <div class="tx-filter-bar">
+    <div class="tx-filter-chips">
+      @for (f of filterOptions; track f.key) {
+        <button class="tx-chip"
+          [class.tx-chip-active]="filterType() === f.key"
+          (click)="setFilter(f.key)">
+          {{ f.label }}
+        </button>
+      }
+    </div>
+  </div>
+
+  <!-- ── SKELETON ────────────────────────────────────── -->
+  @if (loading()) {
+    <div class="tx-card">
+      <nz-skeleton [nzActive]="true" [nzParagraph]="{ rows: 8 }"/>
+    </div>
+  }
+
+  <!-- ── TABLE ───────────────────────────────────────── -->
+  @if (!loading()) {
+    <div class="tx-card">
+
+      @if (transactions().length === 0) {
+        <div class="tx-empty">
+          <div class="tx-empty-icon">📭</div>
+          <p class="tx-empty-title">Belum ada transaksi</p>
+          <p class="tx-empty-desc">Mulai catat pemasukan atau pengeluaran pertama kamu</p>
+          <button class="btn btn-primary btn-md" (click)="openAdd()">
+            + Tambah Transaksi Pertama
+          </button>
+        </div>
+      }
+
+      @if (transactions().length > 0) {
+        <table class="tx-table-full">
+          <thead>
+            <tr>
+              <th>Deskripsi</th>
+              <th>Tipe</th>
+              <th>Rekening</th>
+              <th>Kategori</th>
+              <th>Tanggal</th>
+              <th style="text-align:right">Jumlah</th>
+              <th style="text-align:center; width:80px">Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (tx of transactions(); track tx.id) {
+              <tr class="tx-row-full">
+                <td>
+                  <div class="tx-desc-cell">
+                    <span class="tx-desc-text">{{ tx.description }}</span>
+                    @if (tx.notes) {
+                      <span class="tx-notes-text">{{ tx.notes }}</span>
+                    }
+                  </div>
+                </td>
+                <td style="text-align: left;">
+                  <span class="tx-badge" [class]="getTypeClass(tx.type)">
+                    {{ getTypeLabel(tx.type) }}
+                  </span>
+                </td>
+                <td>
+                  <span class="tx-meta-text">{{ tx.accountName }}</span>
+                </td>
+                <td>
+                  <span class="tx-category-cell">
+                    @if (tx.categoryIcon) { {{ tx.categoryIcon }}&nbsp; }{{ tx.categoryName }}
+                  </span>
+                </td>
+                <td><span class="tx-date-text">{{ formatDate(tx.date) }}</span></td>
+                <td style="text-align:right">
+                  <span class="tx-amount-cell" [class]="getAmountClass(tx.type)">
+                    {{ getAmountPrefix(tx.type) }}{{ formatRupiah(tx.amount) }}
+                  </span>
+                </td>
+                <td style="text-align:center">
+                  <div class="tx-row-actions">
+                    <button class="tx-action-btn" nz-tooltip nzTooltipTitle="Edit" (click)="openEdit(tx)">✏️</button>
+                    <button class="tx-action-btn tx-action-danger"
+                      nz-tooltip nzTooltipTitle="Hapus"
+                      nz-popconfirm nzPopconfirmTitle="Hapus transaksi ini?"
+                      nzPopconfirmPlacement="left"
+                      (nzOnConfirm)="delete(tx.id)">🗑️</button>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+
+        <!-- PAGINATION -->
+        <div class="tx-pagination">
+          <span class="tx-pagination-info">{{ paginationLabel() }}</span>
+          <div class="tx-pagination-controls">
+            <button class="tx-page-btn" [disabled]="page() === 1" (click)="onPageChange(page()-1)">← Prev</button>
+            @for (p of pagesToShow(); track p) {
+              <button class="tx-page-btn" [class.tx-page-active]="p === page()" (click)="onPageChange(p)">{{ p }}</button>
+            }
+            <button class="tx-page-btn" [disabled]="page() * pageSize() >= totalCount()" (click)="onPageChange(page()+1)">Next →</button>
+          </div>
+          <select class="tx-page-size" [value]="pageSize()" (change)="onPageSizeChange(+$any($event.target).value)">
+            <option value="10">10 / hal</option>
+            <option value="25">25 / hal</option>
+            <option value="50">50 / hal</option>
+          </select>
+        </div>
+      }
+    </div>
+  }
+</div>
+
+<!-- ── MODAL ────────────────────────────────────────── -->
+<nz-modal [nzVisible]="showModal()" [nzTitle]="modalTitle()" [nzFooter]="null" nzWidth="540px" (nzOnCancel)="closeModal()">
+  <ng-container *nzModalContent>
+    <form nz-form [formGroup]="form" (ngSubmit)="submit()" nzLayout="vertical">
+
+      <nz-form-item>
+        <nz-form-label nzRequired>Tipe Transaksi</nz-form-label>
+        <nz-form-control>
+          <div class="type-toggle-3">
+            @for (t of txTypes; track t.v) {
+              <button type="button" class="type-btn-3"
+                [class.type-active-expense]="t.v === 'Expense' && form.get('type')?.value === t.v"
+                [class.type-active-income]="t.v === 'Income' && form.get('type')?.value === t.v"
+                [class.type-active-transfer]="t.v === 'Transfer' && form.get('type')?.value === t.v"
+                (click)="form.patchValue({type: t.v}); onTypeChange(t.v)">
+                {{ t.l }}
+              </button>
+            }
+          </div>
+        </nz-form-control>
+      </nz-form-item>
+
+      <div class="form-row-2">
+        <nz-form-item style="flex:1">
+          <nz-form-label nzRequired>Rekening</nz-form-label>
+          <nz-form-control nzErrorTip="Pilih rekening">
+            <nz-select formControlName="accountId" nzPlaceHolder="Pilih rekening" style="width:100%">
+              @for (acc of activeAccounts(); track acc.id) {
+                <nz-option [nzValue]="acc.id" [nzLabel]="acc.name"/>
+              }
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item style="flex:1">
+          <nz-form-label nzRequired>Jumlah (Rp)</nz-form-label>
+          <nz-form-control nzErrorTip="Jumlah harus > 0">
+            <nz-input-number formControlName="amount" [nzMin]="1" [nzStep]="10000" [nzFormatter]="formatRupiah" style="width:100%"/>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      @if (form.get('type')?.value !== 'Transfer') {
+        <nz-form-item>
+          <nz-form-label nzRequired>Kategori</nz-form-label>
+          <nz-form-control nzErrorTip="Pilih kategori">
+            <nz-select formControlName="categoryId" nzPlaceHolder="Pilih kategori" style="width:100%">
+              @for (cat of filteredCategories(); track cat.id) {
+                <nz-option [nzValue]="cat.id" [nzLabel]="(cat.icon ? cat.icon + ' ' : '') + cat.name"/>
+              }
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      }
+
+      <nz-form-item>
+        <nz-form-label nzRequired>Deskripsi</nz-form-label>
+        <nz-form-control nzErrorTip="Deskripsi wajib diisi">
+          <input nz-input formControlName="description" placeholder="contoh: Gaji bulanan, Makan siang..."/>
+        </nz-form-control>
+      </nz-form-item>
+
+      <div class="form-row-2">
+        <nz-form-item style="flex:1">
+          <nz-form-label nzRequired>Tanggal</nz-form-label>
+          <nz-form-control nzErrorTip="Pilih tanggal">
+            <nz-date-picker formControlName="date" nzFormat="dd/MM/yyyy" style="width:100%"/>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item style="flex:1">
+          <nz-form-label>Catatan <span style="color:var(--text-muted);font-weight:400">(opsional)</span></nz-form-label>
+          <nz-form-control>
+            <input nz-input formControlName="notes" placeholder="Catatan tambahan..."/>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn btn-secondary btn-md" (click)="closeModal()">Batal</button>
+        <button type="submit" class="btn btn-primary btn-md" [disabled]="submitting()">
+          @if (submitting()) { Menyimpan... }
+          @else if (isEditing()) { Simpan Perubahan }
+          @else { Tambah Transaksi }
+        </button>
+      </div>
+
+    </form>
+  </ng-container>
+</nz-modal>

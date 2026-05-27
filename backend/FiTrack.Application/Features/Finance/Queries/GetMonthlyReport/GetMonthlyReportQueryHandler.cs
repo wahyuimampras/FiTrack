@@ -18,8 +18,8 @@ public class GetMonthlyReportQueryHandler(
     public async Task<MonthlyReportDto> Handle(GetMonthlyReportQuery request, CancellationToken cancellationToken)
     {
         var userId = currentUser.UserId;
-        var startDate = new DateTime(request.Year, request.Month, 1);
-        var endDate = startDate.AddMonths(1).AddDays(-1);
+        var startDate = new DateTime(request.Year, request.Month, 1, 0, 0, 0, DateTimeKind.Utc);
+        var endDate = startDate.AddMonths(1).AddTicks(-1);
 
         var transactions = await transactionRepo.GetByDateRangeAsync(userId, startDate, endDate, cancellationToken);
 

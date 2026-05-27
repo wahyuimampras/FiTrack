@@ -5,4 +5,4 @@ using MediatR;
 namespace FiTrack.Application.Features.Finance.Queries.GetTransactions;
 
 // Default ke Page 1, PageSize 10 jika tidak dikirim dari Frontend
-public record GetTransactionsQuery(int Page = 1, int PageSize = 10) : IRequest<PagedResult<TransactionDto>>;
+public record GetTransactionsQuery(int Page = 1, int PageSize = 10, string? Type = null) : IRequest<PagedResult<TransactionDto>>;

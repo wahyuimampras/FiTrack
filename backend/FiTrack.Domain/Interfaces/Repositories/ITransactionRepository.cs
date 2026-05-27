@@ -12,7 +12,9 @@ public interface ITransactionRepository
     Task<IEnumerable<Transaction>> GetUserTransactionsAsync(Guid userId, CancellationToken ct = default);
     
     // --- TAMBAHKAN METHOD INI UNTUK PAGINASI ---
-    Task<(IEnumerable<Transaction> Items, int TotalCount)> GetPagedUserTransactionsAsync(Guid userId, int page, int pageSize, CancellationToken ct = default);
+    Task<(IEnumerable<Transaction> Items, int TotalCount)> GetPagedUserTransactionsAsync(Guid userId, int page, int pageSize, FiTrack.Domain.Enums.TransactionType? type = null, CancellationToken ct = default);
+    
+    Task<(decimal TotalIncome, decimal TotalExpense)> GetTotalSummaryAsync(Guid userId, CancellationToken ct = default);
     
     Task AddAsync(Transaction transaction, CancellationToken ct = default);
     void Update(Transaction transaction);

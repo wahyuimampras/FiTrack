@@ -19,5 +19,8 @@ public class MappingProfile : Profile
         CreateMap<SavingGoal, SavingGoalDto>();
         CreateMap<UserSession, SessionDto>();
         CreateMap<User, UserProfileDto>();
+        CreateMap<Category, CategoryDto>()
+            .ForMember(dest => dest.Type,
+                opt => opt.MapFrom(src => src.Type.ToString()));
     }
 }

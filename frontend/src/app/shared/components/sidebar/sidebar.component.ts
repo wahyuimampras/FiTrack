@@ -7,8 +7,10 @@ import { AuthService } from '../../../core/services/auth.service';
 interface NavItem {
   label: string;
   icon: string;
-  route: string;
+  route?: string;
   badge?: { text: string; type: 'success' | 'warning' | 'strava' };
+  children?: NavItem[];
+  isExpanded?: boolean;
 }
 
 interface NavGroup {
@@ -36,29 +38,42 @@ export class SidebarComponent {
       ]
     },
     {
-      label: 'FINANCE',
+      label: 'CORE',
       items: [
-        { label: 'Categories',        icon: '🗂️', route: '/categories' },
-        { label: 'Budgets',        icon: '📋', route: '/budgets' },
-        { label: 'Saving Goals',   icon: '🎯', route: '/saving-goals' },
-      ]
-    },
-    {
-      label: 'WORKOUT',
-      items: [
-        { label: 'Activities',  icon: '🏃', route: '/activities' },
-        { label: 'Stats',       icon: '📈', route: '/workout/stats' },
-        { label: 'Strava Sync', icon: '⚡', route: '/strava',
-          badge: { text: 'Connect', type: 'strava' } },
-        { label: 'Training Plans',       icon: '🗓️', route: '/trainings' }
+        {
+          label: 'Finance',
+          icon: '💰',
+          isExpanded: false,
+          children: [
+            { label: 'Categories',      icon: '🗂️', route: '/categories' },
+            { label: 'Budgets',         icon: '📋', route: '/budgets' },
+            { label: 'Saving Goals',    icon: '🎯', route: '/saving-goals' },
+          ]
+        },
+        {
+          label: 'Workout',
+          icon: '🏋️',
+          isExpanded: false,
+          children: [
+            { label: 'Activities',      icon: '🏃', route: '/activities' },
+            { label: 'Stats',           icon: '📈', route: '/workout/stats' },
+            { label: 'Strava Sync',     icon: '⚡', route: '/strava', badge: { text: 'Connect', type: 'strava' } },
+            { label: 'Training Plans',  icon: '🗓️', route: '/trainings' }
+          ]
+        }
       ]
     },
     {
       label: 'INSIGHTS',
       items: [
         { label: 'Reports', icon: '📑', route: '/reports' },
-        // { label: 'Settings', icon: '️️️⚙️', route: '/settings' }
       ]
     },
   ];
+
+  toggleExpand(item: NavItem) {
+    if (item.children) {
+      item.isExpanded = !item.isExpanded;
+    }
+  }
 }

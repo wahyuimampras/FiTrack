@@ -18,17 +18,45 @@
   <nav class="sidebar-nav">
     @for (group of navGroups; track group.label) {
       <p class="sidebar-section-label">{{ group.label }}</p>
-      @for (item of group.items; track item.route) {
-        <a class="nav-item"
-           [routerLink]="item.route"
-           routerLinkActive="active"
-           [routerLinkActiveOptions]="{ exact: item.route === '/dashboard' }">
-          <span class="nav-item-icon">{{ item.icon }}</span>
-          <span>{{ item.label }}</span>
-          @if (item.badge) {
-            <span class="nav-badge">{{ item.badge.text }}</span>
-          }
-        </a>
+      @for (item of group.items; track item.label) {
+        @if (item.children) {
+          <div class="nav-item-wrapper">
+            <a class="nav-item has-children" (click)="toggleExpand(item)">
+              <span class="nav-item-icon">{{ item.icon }}</span>
+              <span>{{ item.label }}</span>
+              <span class="nav-chevron" style="margin-left: auto; font-size: 10px; opacity: 0.6;">
+                {{ item.isExpanded ? '▼' : '▶' }}
+              </span>
+            </a>
+            @if (item.isExpanded && !layoutService.isSidebarCollapsed()) {
+              <div class="nav-children" style="padding-left: 24px;">
+                @for (child of item.children; track child.route) {
+                  <a class="nav-item child-item"
+                     [routerLink]="child.route"
+                     routerLinkActive="active"
+                     [routerLinkActiveOptions]="{ exact: child.route === '/dashboard' }">
+                    <span class="nav-item-icon">{{ child.icon }}</span>
+                    <span>{{ child.label }}</span>
+                    @if (child.badge) {
+                      <span class="nav-badge">{{ child.badge.text }}</span>
+                    }
+                  </a>
+                }
+              </div>
+            }
+          </div>
+        } @else {
+          <a class="nav-item"
+             [routerLink]="item.route"
+             routerLinkActive="active"
+             [routerLinkActiveOptions]="{ exact: item.route === '/dashboard' }">
+            <span class="nav-item-icon">{{ item.icon }}</span>
+            <span>{{ item.label }}</span>
+            @if (item.badge) {
+              <span class="nav-badge">{{ item.badge.text }}</span>
+            }
+          </a>
+        }
       }
     }
   </nav>

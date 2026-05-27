@@ -11,6 +11,8 @@ using FluentValidation;
 using MediatR;
 using Scalar.AspNetCore;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,18 +20,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddInfrastructure(builder.Configuration);
 
 // Application (MediatR & AutoMapper & FluentValidation)
-// 2. Application (MediatR & AutoMapper & FluentValidation)
-builder.Services.AddMediatR(cfg => 
+builder.Services.AddMediatR(cfg =>
 {
     cfg.RegisterServicesFromAssembly(typeof(AssemblyReference).Assembly);
-    
-    // DAFTARKAN VALIDATION PIPELINE DI SINI
-    cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>)); 
+    cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 });
 
 builder.Services.AddAutoMapper(cfg => cfg.AddMaps(typeof(AssemblyReference).Assembly));
-
-// DAFTARKAN SEMUA VALIDATOR SECARA OTOMATIS
 builder.Services.AddValidatorsFromAssembly(typeof(AssemblyReference).Assembly);
 
 // JWT Authentication
@@ -65,13 +62,19 @@ builder.Services.AddCors(opts =>
          .AllowAnyMethod()
          .AllowCredentials()));
 
+// ── JSON: CamelCase + StringEnum ──────────────────────────────────────────
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
-        options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+        // camelCase agar konsisten dengan Angular (totalIncome, expenseByCategory, dll)
+        options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+        options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+        // Enum sebagai string (Cash, Bank, bukan 0, 1)
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
     });
+
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddOpenApi(); // Built-in .NET 10 OpenAPI
+builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
@@ -92,8 +95,8 @@ app.UseIpRateLimiting();
 
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();                // endpoint: /openapi/v1.json
-    app.MapScalarApiReference();     // UI: /scalar/v1
+    app.MapOpenApi();
+    app.MapScalarApiReference();
 }
 
 app.MapControllers();

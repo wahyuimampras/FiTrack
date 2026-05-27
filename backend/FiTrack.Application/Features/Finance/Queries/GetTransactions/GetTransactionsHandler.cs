@@ -21,9 +21,18 @@ public class GetTransactionsHandler(
         var userId = currentUserService.UserId;
         if (userId == Guid.Empty) throw new UnauthorizedAccessException("User is not authenticated.");
 
+        FiTrack.Domain.Enums.TransactionType? txType = null;
+        if (!string.IsNullOrEmpty(request.Type) && request.Type != "All")
+        {
+            if (Enum.TryParse<FiTrack.Domain.Enums.TransactionType>(request.Type, true, out var parsed))
+            {
+                txType = parsed;
+            }
+        }
+
         // Ambil data Paged dari Repository
         var (items, totalCount) = await transactionRepository.GetPagedUserTransactionsAsync(
-            userId, request.Page, request.PageSize, cancellationToken);
+            userId, request.Page, request.PageSize, txType, cancellationToken);
 
         // Map ke DTO
         var dtos = mapper.Map<IEnumerable<TransactionDto>>(items);

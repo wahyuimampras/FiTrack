@@ -194,10 +194,11 @@ export class DashboardComponent implements OnInit {
   }
 
   getTxTypeLabel(type: string): string {
+    if (!type) return '';
     const map: Record<string, string> = {
-      Income: 'Pemasukan', Expense: 'Pengeluaran', Transfer: 'Transfer'
+      income: 'Income', expense: 'Expense', transfer: 'Transfer'
     };
-    return map[type] ?? type;
+    return map[type.toLowerCase()] ?? type;
   }
 
   formatDate(dateStr: string): string {
