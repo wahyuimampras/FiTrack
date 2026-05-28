@@ -129,7 +129,15 @@ export class DashboardComponent implements OnInit {
         const accs = Array.isArray(data.accounts) ? data.accounts : [];
         this.accounts.set(accs);
 
-        this.budgets.set(Array.isArray(data.budgets) ? data.budgets : []);
+        const budgets = Array.isArray(data.budgets) ? data.budgets : [];
+        const expenseByCategory = data.summary?.expenseByCategory || [];
+        
+        budgets.forEach(b => {
+          const expense = expenseByCategory.find(e => e.category === b.categoryName);
+          b.spent = expense ? expense.amount : 0;
+        });
+        this.budgets.set(budgets);
+
         this.savingGoals.set(Array.isArray(data.goals) ? data.goals : []);
         this.loading.set(false);
       },

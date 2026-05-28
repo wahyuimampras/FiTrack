@@ -21,15 +21,17 @@
       @for (item of group.items; track item.label) {
         @if (item.children) {
           <div class="nav-item-wrapper">
-            <a class="nav-item has-children" (click)="toggleExpand(item)">
-              <span class="nav-item-icon">{{ item.icon }}</span>
-              <span>{{ item.label }}</span>
-              <span class="nav-chevron" style="margin-left: auto; font-size: 10px; opacity: 0.6;">
-                {{ item.isExpanded ? '▼' : '▶' }}
-              </span>
-            </a>
-            @if (item.isExpanded && !layoutService.isSidebarCollapsed()) {
-              <div class="nav-children" style="padding-left: 24px;">
+            @if (!layoutService.isSidebarCollapsed()) {
+              <a class="nav-item has-children" (click)="toggleExpand(item)">
+                <span class="nav-item-icon">{{ item.icon }}</span>
+                <span>{{ item.label }}</span>
+                <span class="nav-chevron" style="margin-left: auto; font-size: 10px; opacity: 0.6;">
+                  {{ item.isExpanded ? '▼' : '▶' }}
+                </span>
+              </a>
+            }
+            @if (layoutService.isSidebarCollapsed() || item.isExpanded) {
+              <div class="nav-children" [style.padding-left]="layoutService.isSidebarCollapsed() ? '0' : '24px'">
                 @for (child of item.children; track child.route) {
                   <a class="nav-item child-item"
                      [routerLink]="child.route"

@@ -1,0 +1,293 @@
+<div class="budget-page">
+
+  <!-- ── HEADER ──────────────────────────────────── -->
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Budget</h1>
+      <p class="page-subtitle">Atur batas pengeluaran per kategori tiap bulan</p>
+    </div>
+    <button class="btn btn-primary btn-md" (click)="openAdd()">
+      + Set Budget
+    </button>
+  </div>
+
+  <!-- ── PERIOD NAVIGATOR ─────────────────────────── -->
+  <div class="period-nav">
+    <button class="period-nav-btn" (click)="prevMonth()">←</button>
+    <div class="period-nav-label">
+      <span class="period-month">{{ periodLabel() }}</span>
+     
+    </div>
+    <button class="period-nav-btn" (click)="nextMonth()">→</button>
+  </div>
+
+  <!-- ── SKELETON ──────────────────────────────────── -->
+  @if (loading()) {
+    <div class="budget-overview-grid">
+      @for (i of [1,2,3,4]; track i) {
+        <nz-skeleton [nzActive]="true" [nzParagraph]="{ rows: 1 }"
+          style="background:white; border-radius:14px; padding:18px"/>
+      }
+    </div>
+    <div class="budget-list-skeleton">
+      @for (i of [1,2,3]; track i) {
+        <nz-skeleton [nzActive]="true" [nzParagraph]="{ rows: 2 }"
+          style="background:white; border-radius:14px; padding:20px"/>
+      }
+    </div>
+  }
+
+  @if (!loading()) {
+
+    <!-- ── OVERVIEW CARDS ───────────────────────── -->
+    <div class="budget-overview-grid">
+      <div class="bov-card bov-total">
+        <p class="bov-label">Total Budget</p>
+        <div class="bov-value">{{ formatRupiah(totalBudget()) }}</div>
+        <p class="bov-sub">{{ budgets().length }} kategori</p>
+      </div>
+      <div class="bov-card">
+        <p class="bov-label">Terpakai</p>
+        <div class="bov-value bov-spent">{{ formatRupiah(totalSpent()) }}</div>
+        <p class="bov-sub">{{ overallPct() }}% dari total budget</p>
+      </div>
+      <div class="bov-card">
+        <p class="bov-label">Sisa Budget</p>
+        <div class="bov-value" [class]="totalRemaining() >= 0 ? 'bov-remaining' : 'bov-overbudget'">
+          {{ formatRupiah(totalRemaining()) }}
+        </div>
+        <p class="bov-sub">{{ totalRemaining() >= 0 ? 'Masih aman' : 'Melebihi budget!' }}</p>
+      </div>
+      <div class="bov-card bov-status">
+        <p class="bov-label">Status Kategori</p>
+        <div class="bov-status-row">
+          <div class="bov-status-item">
+            <span class="bov-dot bov-dot-safe"></span>
+            <span class="bov-status-count">{{ budgetsOnTrack() }}</span>
+            <span class="bov-status-label">Aman</span>
+          </div>
+          <div class="bov-status-item">
+            <span class="bov-dot bov-dot-warning"></span>
+            <span class="bov-status-count">{{ budgetsWarning() }}</span>
+            <span class="bov-status-label">Perhatian</span>
+          </div>
+          <div class="bov-status-item">
+            <span class="bov-dot bov-dot-danger"></span>
+            <span class="bov-status-count">{{ budgetsDanger() }}</span>
+            <span class="bov-status-label">Kritis</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── OVERALL PROGRESS ─────────────────────── -->
+    @if (budgets().length > 0) {
+      <div class="budget-overall-bar">
+        <div class="bob-header">
+          <span class="bob-label">Penggunaan Total Budget</span>
+          <span class="bob-pct"
+            [class]="overallPct() >= 90 ? 'bob-pct-danger' : overallPct() >= 75 ? 'bob-pct-warning' : 'bob-pct-safe'">
+            {{ overallPct() }}%
+          </span>
+        </div>
+        <div class="bob-track">
+          <div class="bob-fill"
+            [style.width.%]="overallPct()"
+            [style.background]="overallPct() >= 90 ? '#dc2626' : overallPct() >= 75 ? '#f59e0b' : '#285A48'">
+          </div>
+        </div>
+        <div class="bob-legend">
+          <span>{{ formatRupiah(totalSpent()) }} terpakai</span>
+          <span>{{ formatRupiah(totalBudget()) }} total</span>
+        </div>
+      </div>
+    }
+
+    <!-- ── BUDGET LIST ───────────────────────────── -->
+    @if (budgets().length === 0) {
+      <div class="budget-empty">
+        <div class="budget-empty-icon">📋</div>
+        <h3 class="budget-empty-title">Belum ada budget untuk {{ periodLabel() }}</h3>
+        <p class="budget-empty-desc">
+          Set batas pengeluaran per kategori agar kamu bisa mengontrol keuangan dengan lebih baik
+        </p>
+        <button class="btn btn-primary btn-md" (click)="openAdd()">
+          + Set Budget Pertama
+        </button>
+      </div>
+    }
+
+    @if (budgets().length > 0) {
+      <div class="budget-list">
+        @for (budget of budgets(); track budget.id) {
+          <div class="budget-item-card" [class]="'bic-' + getStatusClass(budget)">
+
+            <!-- Card Header -->
+            <div class="bic-header">
+              <div class="bic-left">
+                <div class="bic-icon"
+                  [style.background]="(budget.categoryColor ?? '#285A48') + '20'"
+                  [style.color]="budget.categoryColor ?? '#285A48'">
+                  {{ budget.categoryIcon || '📁' }}
+                </div>
+                <div class="bic-info">
+                  <span class="bic-name">{{ budget.categoryName }}</span>
+                  <span class="bic-status-badge" [class]="getStatusClass(budget)">
+                    {{ getStatusLabel(budget) }}
+                  </span>
+                </div>
+              </div>
+              <div class="bic-actions">
+                <button class="bic-action-btn"
+                  nz-tooltip nzTooltipTitle="Edit budget"
+                  (click)="openEdit(budget)">✏️</button>
+                <button class="bic-action-btn bic-action-danger"
+                  nz-tooltip nzTooltipTitle="Hapus budget"
+                  nz-popconfirm
+                  nzPopconfirmTitle="Hapus budget kategori ini?"
+                  nzPopconfirmPlacement="left"
+                  (nzOnConfirm)="delete(budget.id)">🗑️</button>
+              </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="bic-progress-wrap">
+              <div class="bic-progress-track">
+                <div class="bic-progress-fill"
+                  [style.width.%]="budget.percentage"
+                  [style.background]="getProgressColor(budget)">
+                </div>
+              </div>
+              <span class="bic-pct"
+                [style.color]="getProgressColor(budget)">
+                {{ budget.percentage }}%
+              </span>
+            </div>
+
+            <!-- Amounts -->
+            <div class="bic-amounts">
+              <div class="bic-amount-item">
+                <span class="bic-amount-label">Terpakai</span>
+                <span class="bic-amount-value bic-spent">{{ formatRupiah(budget.spent) }}</span>
+              </div>
+              <div class="bic-amount-item bic-amount-center">
+                <span class="bic-amount-label">Sisa</span>
+                <span class="bic-amount-value"
+                  [class]="budget.remaining >= 0 ? 'bic-remaining' : 'bic-overbudget'">
+                  {{ formatRupiah(budget.remaining) }}
+                </span>
+              </div>
+              <div class="bic-amount-item bic-amount-right">
+                <span class="bic-amount-label">Budget</span>
+                <span class="bic-amount-value">{{ formatRupiah(budget.amount) }}</span>
+              </div>
+            </div>
+
+          </div>
+        }
+      </div>
+    }
+
+  } <!-- end !loading -->
+
+</div>
+
+<!-- ── MODAL SET BUDGET ──────────────────────────── -->
+<nz-modal
+  [nzVisible]="showModal()"
+  [nzTitle]="modalTitle()"
+  [nzFooter]="null"
+  nzWidth="460px"
+  (nzOnCancel)="closeModal()"
+>
+  <ng-container *nzModalContent>
+    <form nz-form [formGroup]="form" (ngSubmit)="submit()" nzLayout="vertical">
+
+      <!-- Kategori -->
+      <nz-form-item>
+        <nz-form-label nzRequired>Kategori Pengeluaran</nz-form-label>
+        <nz-form-control nzErrorTip="Pilih kategori">
+          <nz-select formControlName="categoryId"
+            nzPlaceHolder="Pilih kategori pengeluaran"
+            style="width:100%"
+            [nzDisabled]="isEditing()">
+            @if (isEditing()) {
+              <!-- Saat edit, tampilkan kategori yang sedang diedit -->
+              <nz-option
+                [nzValue]="editingBudget()!.categoryId"
+                [nzLabel]="(editingBudget()!.categoryIcon ?? '') + ' ' + editingBudget()!.categoryName"/>
+            } @else {
+              @for (cat of availableCategories(); track cat.id) {
+                <nz-option
+                  [nzValue]="cat.id"
+                  [nzLabel]="(cat.icon ? cat.icon + ' ' : '') + cat.name"/>
+              }
+              @if (availableCategories().length === 0) {
+                <nz-option nzValue="" nzLabel="Semua kategori sudah diset budget" [nzDisabled]="true"/>
+              }
+            }
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+
+      <!-- Jumlah Budget -->
+      <nz-form-item>
+        <nz-form-label nzRequired>Jumlah Budget</nz-form-label>
+        <nz-form-control nzErrorTip="Jumlah budget minimal Rp 1.000">
+          <nz-input-number
+            formControlName="amount"
+            [nzMin]="1000"
+            [nzStep]="50000"
+            [nzFormatter]="formatRupiah"
+            style="width:100%"
+          />
+        </nz-form-control>
+      </nz-form-item>
+
+      <!-- Periode -->
+      <div class="form-row-2">
+        <nz-form-item style="flex:1">
+          <nz-form-label nzRequired>Bulan</nz-form-label>
+          <nz-form-control>
+            <nz-select formControlName="month" style="width:100%">
+              @for (m of months; track m.v) {
+                <nz-option [nzValue]="m.v" [nzLabel]="m.l"/>
+              }
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item style="flex:1">
+          <nz-form-label nzRequired>Tahun</nz-form-label>
+          <nz-form-control>
+            <nz-select formControlName="year" style="width:100%">
+              @for (y of years; track y) {
+                <nz-option [nzValue]="y" [nzLabel]="'' + y"/>
+              }
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <!-- Preview -->
+      @if (form.get('amount')?.value && form.get('categoryId')?.value) {
+        <div class="budget-modal-preview">
+          <p class="bmp-label">Preview budget harian:</p>
+          <p class="bmp-value">
+            ~{{ formatRupiah(form.get('amount')!.value / 30) }} / hari
+          </p>
+        </div>
+      }
+
+      <!-- Actions -->
+      <div class="modal-actions">
+        <button type="button" class="btn btn-secondary btn-md" (click)="closeModal()">Batal</button>
+        <button type="submit" class="btn btn-primary btn-md" [disabled]="submitting()">
+          @if (submitting()) { Menyimpan... }
+          @else if (isEditing()) { Simpan Perubahan }
+          @else { Set Budget }
+        </button>
+      </div>
+
+    </form>
+  </ng-container>
+</nz-modal>

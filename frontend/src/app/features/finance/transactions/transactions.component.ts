@@ -310,10 +310,10 @@ export class TransactionsComponent implements OnInit {
   }
 
   getAmountClass(type: string): string {
-    return type === 'Income' ? 'amount-income' : type === 'Expense' ? 'amount-expense' : 'amount-transfer';
+    return type === 'income' ? 'amount-income' : type === 'expense' ? 'amount-expense' : 'amount-transfer';
   }
 
   getAmountPrefix(type: string): string {
-    return type === 'Income' ? '+' : type === 'Expense' ? '-' : '↔';
+    return type === 'income' ? '+' : type === 'expense' ? '-' : '↔';
   }
 }
